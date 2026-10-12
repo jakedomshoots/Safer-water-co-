@@ -173,9 +173,10 @@ function init() {
   const splash = new THREE.InstancedMesh(new THREE.SphereGeometry(0.05, 10, 10), dripMat, SPLASH); splash.count = 0; scene.add(splash);
   const splashV = Array.from({ length: SPLASH }, () => new THREE.Vector3()), splashP = Array.from({ length: SPLASH }, () => new THREE.Vector3());
   let splashAlive = 0; const dummy = new THREE.Object3D();
-  function burst(x, z) {
-    splashAlive = SPLASH; splash.count = SPLASH;
-    for (let i = 0; i < SPLASH; i++) { const a = (i / SPLASH) * Math.PI * 2 + Math.random() * 0.4; const sp = 1.4 + Math.random() * 1.6; splashP[i].set(x, -3.1, z); splashV[i].set(Math.cos(a) * sp * 0.6, 2.6 + Math.random() * 2.2, Math.sin(a) * sp * 0.6); }
+  let splashFloor = -3.1;
+  function burst(x, z, floorY = -3.1) {
+    splashAlive = SPLASH; splash.count = SPLASH; splashFloor = floorY;
+    for (let i = 0; i < SPLASH; i++) { const a = (i / SPLASH) * Math.PI * 2 + Math.random() * 0.4; const sp = 1.4 + Math.random() * 1.6; splashP[i].set(x, floorY, z); splashV[i].set(Math.cos(a) * sp * 0.6, 2.6 + Math.random() * 2.2, Math.sin(a) * sp * 0.6); }
   }
   // Drip timeline (seconds): neck stretches, drip tears off with recoil, falls, splashes
   const PERIOD = 4.8, STRETCH_T = 1.4, FALL = 0.72;
@@ -189,7 +190,22 @@ function init() {
   window.addEventListener('pointermove', e => { target.x = (e.clientX / window.innerWidth) * 2 - 1; target.y = -(e.clientY / window.innerHeight) * 2 + 1; }, { passive: true });
 
   function resize() { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
-  window.addEventListener('resize', resize); resize();
+  // On phones the drop lives in a dedicated window between the intro and the buttons
+  const stage = document.getElementById('heroStage');
+  function fitStage() {
+    if (!isMobile || !stage || !stage.offsetHeight) return;
+    camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+    const r = canvas.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    const cx = sr.left + sr.width * 0.5, cy = sr.top + sr.height * 0.5;
+    const ndc = new THREE.Vector3(((cx - r.left) / r.width) * 2 - 1, -(((cy - r.top) / r.height) * 2 - 1), 0.5);
+    ndc.unproject(camera).sub(camera.position).normalize();
+    const k = (0 - camera.position.z) / ndc.z; const pt = ndc.multiplyScalar(k).add(camera.position);
+    const pxPerUnit = r.height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z);
+    const sc = (sr.height * 0.7 / pxPerUnit) / 3.4;
+    hero.userData.base.set(pt.x, pt.y + 0.35 * sc, 0); hero.userData.amp = 0.08; hero.userData.scale = sc;
+  }
+  window.addEventListener('resize', () => { resize(); fitStage(); }); resize(); fitStage();
+  setTimeout(fitStage, 400); setTimeout(fitStage, 2000);
   let visible = true; new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(canvas);
 
   const clock = new THREE.Clock();
@@ -202,9 +218,10 @@ function init() {
     drops.children.forEach(m => { const u = m.userData, ph = u.phase || 0; m.position.y = u.base.y + Math.sin(t * u.speed + ph) * u.amp; m.position.x = u.base.x + Math.cos(t * u.speed * 0.7 + ph) * u.amp * 0.4; m.rotation.y = t * u.rot; m.rotation.z = Math.sin(t * 0.4 + ph) * 0.1; });
     hero.rotation.y = t * 0.12 + mouse.x * 0.4; hero.rotation.x = -mouse.y * 0.22;
     const dt = Math.min(0.05, t - lastT); lastT = t;
-    const base = isMobile ? 0.7 : 1;
+    const base = hero.userData.scale || (isMobile ? 0.7 : 1);
     hero.scale.setScalar(base);
-    shadow.position.x = hero.position.x; shadow.scale.setScalar(1 + (hero.position.y - hero.userData.base.y) * 0.1 + liquid.uStretch.value * 0.15);
+    shadow.position.x = hero.position.x; shadow.scale.setScalar((isMobile ? base * 1.1 : 1) * (1 + (hero.position.y - hero.userData.base.y) * 0.1 + liquid.uStretch.value * 0.15));
+    if (isMobile) shadow.position.y = hero.position.y - 3.55 * base;
     liquid.uTime.value = t;
     liquid.uWobble.value *= Math.pow(0.25, dt); // decay
 
@@ -229,17 +246,17 @@ function init() {
         liquid.uStretch.value = Math.max(-0.15, Math.exp(-5 * v) * Math.cos(16 * v)); // tear-off recoil
         if (!dripped) { dripped = true; drip.visible = true; liquid.uWobble.value = 1; }
         if (v < FALL) {
-          const tipY = hero.position.y - (1.6 + 1.15) * base; const q = v / FALL;
-          drip.position.set(hero.position.x, tipY - q * q * (tipY + 3.15), hero.position.z);
+          const tipY = hero.position.y - (1.6 + 1.15) * base; const q = v / FALL; const floorY = isMobile ? hero.position.y - 3.6 * base : -3.15;
+          drip.position.set(hero.position.x, tipY - q * q * (tipY - floorY), hero.position.z);
           drip.scale.set(1 - q * 0.25, 1 + q * 0.9, 1 - q * 0.25);
-        } else if (drip.visible) { drip.visible = false; wMat.uniforms.uDrip.value.set(hero.position.x, -hero.position.z, t); burst(hero.position.x, hero.position.z); }
+        } else if (drip.visible) { drip.visible = false; wMat.uniforms.uDrip.value.set(hero.position.x, -hero.position.z, t); burst(hero.position.x, hero.position.z, isMobile ? hero.position.y - 3.6 * base : -3.1); }
         if (u > PERIOD) dripT0 = t;
       }
     }
     // --- splash crown
     if (splashAlive > 0) {
       let alive = 0;
-      for (let i = 0; i < SPLASH; i++) { const v = splashV[i], pp = splashP[i]; if (pp.y < -3.25 && v.y < 0) { dummy.scale.setScalar(0); } else { v.y -= 9.5 * dt; pp.addScaledVector(v, dt); dummy.scale.setScalar(1); alive++; } dummy.position.copy(pp); dummy.updateMatrix(); splash.setMatrixAt(i, dummy.matrix); }
+      for (let i = 0; i < SPLASH; i++) { const v = splashV[i], pp = splashP[i]; if (pp.y < splashFloor - 0.15 && v.y < 0) { dummy.scale.setScalar(0); } else { v.y -= 9.5 * dt; pp.addScaledVector(v, dt); dummy.scale.setScalar(1); alive++; } dummy.position.copy(pp); dummy.updateMatrix(); splash.setMatrixAt(i, dummy.matrix); }
       splash.instanceMatrix.needsUpdate = true; splashAlive = alive; if (!alive) splash.count = 0;
     }
     camera.position.x += (mouse.x * 0.7 - camera.position.x) * 0.04; camera.position.y += (0.6 + mouse.y * 0.45 - camera.position.y) * 0.04;
