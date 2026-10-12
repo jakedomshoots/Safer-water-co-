@@ -92,6 +92,7 @@
   function showDrop(key) {
     const d = DATA[key]; if (!d) return;
     $$('.callout').forEach(h => h.classList.toggle('is-active', h.dataset.key === key));
+    document.dispatchEvent(new CustomEvent('drop:select', { detail: { key } }));
     $$('.tabs button').forEach(b => b.classList.toggle('is-active', b.dataset.key === key));
     card.classList.remove('is-switching'); void card.offsetWidth; card.classList.add('is-switching');
     $('#dropNo').textContent = 'Detail ' + d.n; $('#dropTitle').textContent = d.title; $('#dropBody').textContent = d.body; $('#dropFix').textContent = d.fix;
@@ -99,7 +100,6 @@
     $('#dropEffects').innerHTML = d.effects.map(e => `<li>${e}</li>`).join('');
   }
   $$('.callout, .tabs button').forEach(el => { el.addEventListener('click', () => showDrop(el.dataset.key)); if (el.classList.contains('callout')) el.addEventListener('pointerenter', () => showDrop(el.dataset.key)); });
-  $$('.callout').forEach(h => { h.setAttribute('tabindex', '0'); h.setAttribute('role', 'button'); h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showDrop(h.dataset.key); } }); });
   showDrop('hardness');
 
   /* ---------- sheet 03: journey overlay ---------- */

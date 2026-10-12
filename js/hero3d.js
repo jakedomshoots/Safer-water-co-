@@ -20,6 +20,51 @@ export function gridTexture(size = 1024, cells = 10, minor = 5) {
   return t;
 }
 
+// Teardrop geometry: a sphere pulled upward into a point
+export function teardrop(radius, detail) {
+  const g = new THREE.SphereGeometry(radius, detail, detail);
+  const pos = g.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i); const t = THREE.MathUtils.clamp((y / radius + 1) / 2, 0, 1);
+    const pinch = 1 - Math.pow(t, 2.2) * 0.85;
+    pos.setX(i, pos.getX(i) * pinch); pos.setZ(i, pos.getZ(i) * pinch); pos.setY(i, y + Math.pow(t, 3) * radius * 0.7);
+  }
+  g.computeVertexNormals(); return g;
+}
+
+// "Liquid" vertex deformation shared by any material: continuous ripple, neck stretch, cursor poke
+export function makeLiquid() {
+  const uniforms = { uTime: { value: 0 }, uWobble: { value: 0 }, uStretch: { value: 0 }, uPoke: { value: new THREE.Vector3() } };
+  const key = 'liquid' + Math.random().toString(36).slice(2, 7);
+  function liquify(mat) {
+    mat.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, uniforms);
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', `#include <common>\nuniform float uTime; uniform float uWobble; uniform float uStretch; uniform vec3 uPoke;`)
+        .replace('#include <begin_vertex>', `
+          vec3 transformed = vec3(position);
+          {
+            float t = uTime; vec3 p = position;
+            float w = sin(p.y * 3.1 + t * 2.4) * 0.5 + sin(p.x * 4.3 - t * 3.1 + p.z * 2.0) * 0.3 + sin(p.z * 5.2 + t * 2.0 + p.y) * 0.2;
+            float amp = 0.03 + uWobble * 0.10;
+            transformed += normal * w * amp;
+            float low = smoothstep(0.3, -1.6, p.y);
+            float tail = low * low;
+            transformed.y -= uStretch * tail * 1.15;
+            transformed.xz *= 1.0 - uStretch * tail * 0.6;
+            transformed += uPoke * (0.6 + 0.4 * sin(p.y * 2.0 + t * 6.0)) * (1.0 - low * 0.5);
+          }`);
+    };
+    mat.customProgramCacheKey = () => key;
+  }
+  return { uniforms, liquify };
+}
+
+export const GLASS_OPTS = {
+  color: 0xe8f7ff, metalness: 0, roughness: 0.03, transmission: 1, thickness: 2.2, ior: 1.33,
+  clearcoat: 1, clearcoatRoughness: 0.03, attenuationColor: new THREE.Color(0x9fd8f2), attenuationDistance: 3.5, envMapIntensity: 0.9, specularIntensity: 1,
+};
+
 if (canvas) init();
 
 function init() {
@@ -48,48 +93,11 @@ function init() {
   const paper = new THREE.Mesh(new THREE.PlaneGeometry(60, 40), new THREE.MeshBasicMaterial({ map: gridTex }));
   paper.position.z = -7; scene.add(paper);
 
-  // ---------- Teardrop geometry ----------
-  function teardrop(radius, detail) {
-    const g = new THREE.SphereGeometry(radius, detail, detail);
-    const pos = g.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      const y = pos.getY(i); const t = THREE.MathUtils.clamp((y / radius + 1) / 2, 0, 1);
-      const pinch = 1 - Math.pow(t, 2.2) * 0.85;
-      pos.setX(i, pos.getX(i) * pinch); pos.setZ(i, pos.getZ(i) * pinch); pos.setY(i, y + Math.pow(t, 3) * radius * 0.7);
-    }
-    g.computeVertexNormals(); return g;
-  }
-
   const drops = new THREE.Group(); scene.add(drops);
 
   // Hero drop: real glass
-  const glass = new THREE.MeshPhysicalMaterial({
-    color: 0xe8f7ff, metalness: 0, roughness: 0.03, transmission: 1, thickness: 2.2, ior: 1.33,
-    clearcoat: 1, clearcoatRoughness: 0.03, attenuationColor: new THREE.Color(0x9fd8f2), attenuationDistance: 3.5, envMapIntensity: 0.9, specularIntensity: 1,
-  });
-  // Shared "liquid" uniforms: continuous surface ripple, neck stretch for the drip, and cursor poke
-  const liquid = { uTime: { value: 0 }, uWobble: { value: 0 }, uStretch: { value: 0 }, uPoke: { value: new THREE.Vector3() } };
-  function liquify(mat) {
-    mat.onBeforeCompile = (sh) => {
-      Object.assign(sh.uniforms, liquid);
-      sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', `#include <common>\nuniform float uTime; uniform float uWobble; uniform float uStretch; uniform vec3 uPoke;`)
-        .replace('#include <begin_vertex>', `
-          vec3 transformed = vec3(position);
-          {
-            float t = uTime; vec3 p = position;
-            float w = sin(p.y * 3.1 + t * 2.4) * 0.5 + sin(p.x * 4.3 - t * 3.1 + p.z * 2.0) * 0.3 + sin(p.z * 5.2 + t * 2.0 + p.y) * 0.2;
-            float amp = 0.03 + uWobble * 0.10;
-            transformed += normal * w * amp;
-            float low = smoothstep(0.3, -1.6, p.y);
-            float tail = low * low;
-            transformed.y -= uStretch * tail * 1.15;
-            transformed.xz *= 1.0 - uStretch * tail * 0.6;
-            transformed += uPoke * (0.6 + 0.4 * sin(p.y * 2.0 + t * 6.0)) * (1.0 - low * 0.5);
-          }`);
-    };
-    mat.customProgramCacheKey = () => 'liquid';
-  }
+  const glass = new THREE.MeshPhysicalMaterial(GLASS_OPTS);
+  const { uniforms: liquid, liquify } = makeLiquid();
   liquify(glass);
   const hero = new THREE.Mesh(teardrop(1.6, isMobile ? 64 : 128), glass);
   hero.position.set(isMobile ? 2.1 : 3.6, isMobile ? 4.6 : 0.3, isMobile ? -2.5 : 0);

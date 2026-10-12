@@ -139,38 +139,17 @@
 
         <div class="lab">
           <div class="lab__fig reveal">
-            <svg class="dropfig" viewBox="0 0 440 540" aria-label="Line drawing of a water drop with numbered callouts">
-              <defs>
-                <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                  <line x1="0" y1="0" x2="0" y2="8" stroke="var(--ink)" stroke-width="0.8" opacity=".35"/>
-                </pattern>
-                <clipPath id="dropClip"><path d="M220 30 C220 30 70 220 70 335 a150 150 0 0 0 300 0 C370 220 220 30 220 30Z"/></clipPath>
-              </defs>
-              <!-- axis lines -->
-              <line class="axis" x1="220" y1="10" x2="220" y2="530"/>
-              <line class="axis" x1="30" y1="335" x2="410" y2="335"/>
-              <!-- hatch water level, animates -->
-              <g clip-path="url(#dropClip)">
-                <rect class="dropfig__fill" x="0" y="300" width="440" height="300" fill="url(#hatch)"/>
-                <path class="dropfig__wave" d="M-440 300 Q-330 285 -220 300 T0 300 T220 300 T440 300 T660 300 T880 300" fill="none"/>
-              </g>
-              <path class="dropfig__outline draw-on" d="M220 30 C220 30 70 220 70 335 a150 150 0 0 0 300 0 C370 220 220 30 220 30Z"/>
-              <path class="dropfig__inner draw-on" d="M120 335 a100 100 0 0 0 100 100"/>
-              <!-- dimension -->
-              <g class="dimline">
-                <line x1="70" y1="505" x2="370" y2="505"/><line x1="70" y1="495" x2="70" y2="515"/><line x1="370" y1="495" x2="370" y2="515"/>
-                <text x="220" y="498">Ø 300</text>
-              </g>
-              <!-- callouts -->
-              <g class="callouts">
-                <g class="callout" data-key="hardness" transform="translate(150 330)"><line x1="0" y1="0" x2="-70" y2="-40"/><circle r="13"/><text>1</text></g>
-                <g class="callout" data-key="chlorine" transform="translate(270 255)"><line x1="0" y1="0" x2="80" y2="-50"/><circle r="13"/><text>2</text></g>
-                <g class="callout" data-key="tthm" transform="translate(225 400)"><line x1="0" y1="0" x2="90" y2="60"/><circle r="13"/><text>3</text></g>
-                <g class="callout" data-key="sulfur" transform="translate(305 355)"><line x1="0" y1="0" x2="80" y2="10"/><circle r="13"/><text>4</text></g>
-                <g class="callout" data-key="pfas" transform="translate(150 425)"><line x1="0" y1="0" x2="-85" y2="40"/><circle r="13"/><text>5</text></g>
-                <g class="callout" data-key="sediment" transform="translate(220 165)"><line x1="0" y1="0" x2="-110" y2="-30"/><circle r="13"/><text>6</text></g>
-              </g>
-            </svg>
+            <div class="lab3d" id="lab3d">
+              <canvas id="labCanvas" aria-hidden="true"></canvas>
+              <svg class="lab3d__lines" aria-hidden="true"></svg>
+              <button class="callout" data-key="hardness" aria-label="Hardness">1</button>
+              <button class="callout" data-key="chlorine" aria-label="Chlorine">2</button>
+              <button class="callout" data-key="tthm" aria-label="TTHMs">3</button>
+              <button class="callout" data-key="sulfur" aria-label="Sulfur">4</button>
+              <button class="callout" data-key="pfas" aria-label="PFAS">5</button>
+              <button class="callout" data-key="sediment" aria-label="Sediment">6</button>
+              <div class="dim dim--lab"><i></i><span>Ø 2.6 mm · H₂O</span><i></i></div>
+            </div>
             <div class="fig-cap">FIG. 2 — Typical municipal supply, Manatee Co. Not to scale.</div>
           </div>
 
@@ -489,6 +468,7 @@
   <script src="vendor/gsap/ScrollTrigger.min.js"></script>
   <script type="module" src="js/hero3d.js"></script>
   <script type="module" src="js/journey3d.js"></script>
+  <script type="module" src="js/droplab3d.js"></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
