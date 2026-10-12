@@ -28,7 +28,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; }
 body {
   margin: 0; color: var(--ink); font-family: var(--font-body); font-size: 17.5px; line-height: 1.6;
   background-color: var(--paper);
@@ -39,7 +39,7 @@ body {
     linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
   background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
   background-position: -1px -1px;
-  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow-x: clip;
 }
 body.is-locked { overflow: hidden; }
 img, svg { display: block; max-width: 100%; }
@@ -368,7 +368,7 @@ input[type=range]::-moz-range-track { height: 1px; background: var(--ink-line); 
 input[type=range]::-moz-range-progress { height: 1px; background: var(--ink); }
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 22px; margin-top: -11px; background: var(--paper-3); border: 1.5px solid var(--ink); border-radius: 1px; box-shadow: 3px 3px 0 var(--ink); }
 input[type=range]::-moz-range-thumb { width: 12px; height: 20px; background: var(--paper-3); border: 1.5px solid var(--ink); border-radius: 1px; box-shadow: 3px 3px 0 var(--ink); }
-.takeoff { position: relative; border: 1px solid var(--ink); background: var(--paper-3); padding: 22px 26px 28px; font-family: var(--font-mono); }
+.takeoff { position: relative; border: 1px solid var(--ink); background: var(--paper-3); padding: 30px 26px 28px; font-family: var(--font-mono); }
 .takeoff__head { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 12px; font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); padding: 0 0 10px; border-bottom: 1px solid var(--ink); }
 .takeoff__row { position: relative; display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 12px; align-items: baseline; padding: 14px 0 16px; border-bottom: 1px solid var(--ink-faint); font-size: .86rem; }
 .takeoff__row > span:first-child { font-family: var(--font-body); color: var(--ink); }
@@ -487,12 +487,13 @@ input[type=range]::-moz-range-thumb { width: 12px; height: 20px; background: var
   .lab, .calc__grid, .area__grid, .cta__grid { grid-template-columns: 1fr; }
   .sheets, .notes__grid { grid-template-columns: 1fr; }
   .hero__notes { display: none; }
-  .journey__title { top: 84px; max-width: 78%; padding-right: 10px; }
-  .journey__title h2 { font-size: 1.5rem; }
-  .journey__title .shead__id { margin-bottom: 10px; font-size: .62rem; }
-  .journey__canvas { height: 62%; }
-  .journey__pin::after { content: ""; position: absolute; left: 0; right: 0; top: 56%; height: 10%; background: linear-gradient(transparent, var(--paper)); pointer-events: none; }
-  .journey__steps { left: var(--gutter); right: var(--gutter); width: auto; bottom: 70px; }
+  .journey { height: 440vh; }
+  .journey__title { top: 78px; left: var(--gutter); right: var(--gutter); max-width: none; padding: 8px 0 6px; background: linear-gradient(var(--paper) 70%, transparent); }
+  .journey__title h2 { font-size: 1.35rem; }
+  .journey__title .shead__id { margin-bottom: 8px; font-size: .6rem; }
+  .journey__canvas { height: 72%; }
+  .journey__pin::after { content: ""; position: absolute; left: 0; right: 0; top: 64%; height: 9%; background: linear-gradient(transparent, var(--paper)); pointer-events: none; }
+  .journey__steps { left: var(--gutter); right: var(--gutter); width: auto; bottom: 66px; }
   .callout-card { padding: 18px 20px; box-shadow: 4px 4px 0 rgba(10,44,80,.12); }
   .callout-card h3 { font-size: 1.25rem; }
   .callout-card p { font-size: .92rem; }
@@ -517,7 +518,7 @@ input[type=range]::-moz-range-thumb { width: 12px; height: 20px; background: var
   .specgrid__row > div { padding: 10px 6px; font-size: .64rem; }
   .specgrid__row > div:not(:first-child) { font-size: .58rem; }
   .legend__items { grid-template-columns: repeat(2, 1fr); }
-  .takeoff { padding: 18px 16px 22px; } .takeoff__row { grid-template-columns: 1fr auto; } .takeoff__row > span:nth-child(2), .takeoff__head span:nth-child(2) { display: none; } .takeoff__head { grid-template-columns: 1fr auto; }
+  .takeoff { padding: 30px 16px 22px; } .takeoff__row { grid-template-columns: 1fr auto; } .takeoff__row > span:nth-child(2), .takeoff__head span:nth-child(2) { display: none; } .takeoff__head { grid-template-columns: 1fr auto; }
   .stamp--est { top: 6px; right: 8px; font-size: .5rem; }
 }
 @media (prefers-reduced-motion: reduce) {

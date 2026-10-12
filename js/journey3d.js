@@ -14,7 +14,7 @@ function init() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2));
   renderer.setClearColor(PAPER, 1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -106,11 +106,11 @@ function init() {
   // Red marker ring: tracks the active stage (a drafter's "you are here")
   const marker = new THREE.Group();
   marker.add(new THREE.Mesh(new THREE.TorusGeometry(r + 0.35, 0.03, 8, 96), new THREE.MeshBasicMaterial({ color: RED })));
-  const tri = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.36, 3), new THREE.MeshBasicMaterial({ color: RED })); tri.rotation.x = Math.PI; tri.position.y = h / 2 + 1.1; marker.add(tri);
+  const tri = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.36, 3), new THREE.MeshBasicMaterial({ color: RED })); tri.position.y = -h / 2 - 0.75; marker.add(tri);
   marker.children[0].rotation.x = Math.PI / 2; marker.position.x = stageX[0]; scene.add(marker);
 
   // ---------- Particle stream ----------
-  const N = isMobile ? 2200 : 5000;
+  const N = isMobile ? 1500 : 5000;
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(N * 3), seed = new Float32Array(N), kind = new Float32Array(N);
   for (let i = 0; i < N; i++) { const a = Math.random() * 6.28, rr = Math.sqrt(Math.random()) * (PIPE_R - 0.06); pos[i * 3] = THREE.MathUtils.randFloatSpread(L * 2); pos[i * 3 + 1] = Math.sin(a) * rr; pos[i * 3 + 2] = Math.cos(a) * rr; seed[i] = Math.random(); kind[i] = Math.random() < 0.18 ? 1 : 0; }
@@ -147,17 +147,17 @@ function init() {
   function tick() {
     requestAnimationFrame(tick); if (!visible) return;
     const t = reduced ? 0 : clock.getElapsedTime();
-    smooth += (progress - smooth) * 0.08;
+    smooth += (progress - smooth) * 0.12;
     const x = THREE.MathUtils.lerp(stageX[0], stageX[STAGES - 1], smooth);
     const stage = Math.round(smooth * (STAGES - 1));
     const orbit = Math.sin(smooth * Math.PI * 2.5) * 0.9;
     const wide = camera.aspect > 1.15;
-    camera.position.set(x + (wide ? -1.7 : 0.6) + orbit * 0.6, (wide ? 1.4 : 0.6) + Math.sin(smooth * Math.PI) * 0.5, wide ? 7.8 : 10.5);
-    look.set(x + (wide ? -2.7 : 0.2), wide ? 0.1 : -0.6, 0); camera.lookAt(look);
+    camera.position.set(x + (wide ? -1.7 : 0.3) + orbit * (wide ? 0.6 : 0.3), (wide ? 1.4 : 2.2) + Math.sin(smooth * Math.PI) * 0.4, wide ? 7.8 : 9.6);
+    look.set(x + (wide ? -2.7 : 0.1), wide ? 0.1 : 1.25, 0); camera.lookAt(look);
     bubbleMats.forEach(m => (m.uniforms.uTime.value = t));
 
     streamMat.uniforms.uActive.value = smooth * (STAGES - 1) + 0.5; streamMat.uniforms.uTime.value = t;
-    marker.position.x += (stageX[stage] - marker.position.x) * 0.1; marker.children[0].rotation.z = t * 0.6; marker.children[1].position.y = h / 2 + 1.1 + Math.sin(t * 3) * 0.08;
+    marker.position.x += (stageX[stage] - marker.position.x) * 0.1; marker.children[0].rotation.z = t * 0.6; marker.children[1].position.y = -h / 2 - 0.75 + Math.sin(t * 3) * 0.06;
     cores.forEach((c, i) => { c.material.emissiveIntensity += (((i === stage) ? (i === 3 ? 1.2 : 0.25) : 0.05) - c.material.emissiveIntensity) * 0.08; if (i !== 3) c.rotation.y = t * 0.15; if (c.userData.glow) c.userData.glow.intensity = c.material.emissiveIntensity * 8; });
 
     if (stage !== lastStage) { lastStage = stage; section.dispatchEvent(new CustomEvent('journey:stage', { detail: { stage } })); }
