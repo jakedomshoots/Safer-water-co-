@@ -5,170 +5,190 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Safer Water Co. — Whole-Home Water Filtration, Bradenton FL</title>
   <meta name="description" content="Safer Water Co. designs and installs whole-home water filtration, softening and reverse osmosis systems in Bradenton, Lakewood Ranch, Palmetto, Anna Maria and Sarasota. Free in-home water test." />
-  <meta property="og:title" content="Safer Water Co. — Water that feels different." />
+  <meta property="og:title" content="Safer Water Co. — Clean water, drawn to spec." />
   <meta property="og:description" content="Whole-home filtration engineered for Florida water. Bradenton based. Free water test." />
-  <meta name="theme-color" content="#030b16" />
+  <meta name="theme-color" content="#eef2f6" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 
   <script type="importmap">
-  {
-    "imports": {
-      "three": "./vendor/three/three.module.js",
-      "three/addons/": "./vendor/three/addons/"
-    }
-  }
+  { "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
   </script>
 </head>
 <body>
-  <!-- Loader -->
+  <!-- Loader: the drop is drafted in line by line -->
   <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader__drop">
-      <svg viewBox="0 0 64 80" width="56" height="70" aria-hidden="true">
-        <path d="M32 4 C32 4 8 34 8 50 a24 24 0 0 0 48 0 C56 34 32 4 32 4Z" fill="none" stroke="url(#lg)" stroke-width="2"/>
-        <defs><linearGradient id="lg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9ff4ff"/><stop offset="1" stop-color="#2fb8ff"/></linearGradient></defs>
-        <clipPath id="fillclip"><rect class="loader__fill" x="0" y="80" width="64" height="80"/></clipPath>
-        <path d="M32 4 C32 4 8 34 8 50 a24 24 0 0 0 48 0 C56 34 32 4 32 4Z" fill="#4fd8ff" clip-path="url(#fillclip)"/>
-      </svg>
-    </div>
-    <div class="loader__text">Safer Water Co.</div>
+    <svg class="loader__drop" viewBox="0 0 120 150" width="96" height="120">
+      <path class="draw" d="M60 8 C60 8 16 64 16 96 a44 44 0 0 0 88 0 C104 64 60 8 60 8Z"/>
+      <path class="draw draw--2" d="M34 96 a26 26 0 0 0 26 26" />
+      <line class="draw draw--3" x1="60" y1="2" x2="60" y2="146"/>
+      <line class="draw draw--3" x1="6" y1="96" x2="114" y2="96"/>
+    </svg>
+    <div class="loader__meta"><span>DRAFTING SHEET 01</span><span id="loaderPct">0%</span></div>
   </div>
 
-  <div class="grain" aria-hidden="true"></div>
-  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <!-- Drafting crosshair cursor with coordinate readout -->
+  <div class="xh" id="xh" aria-hidden="true">
+    <span class="xh__h"></span><span class="xh__v"></span><span class="xh__box"></span>
+    <span class="xh__read" id="xhRead">X 0000 · Y 0000</span>
+  </div>
 
-  <!-- Nav -->
-  <header class="nav" id="nav">
-    <a class="nav__brand" href="#top" aria-label="Safer Water Co. home">
-      <span class="nav__mark">
-        <svg viewBox="0 0 32 40" width="22" height="28" aria-hidden="true"><path d="M16 2 C16 2 3 18 3 26 a13 13 0 0 0 26 0 C29 18 16 2 16 2Z" fill="url(#mg)"/><defs><linearGradient id="mg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#b8fbff"/><stop offset="1" stop-color="#1ea7ff"/></linearGradient></defs></svg>
-      </span>
-      <span class="nav__name">Safer Water <em>Co.</em></span>
+  <!-- Drawing header -->
+  <header class="hdr" id="hdr">
+    <a class="brand" href="#top" aria-label="Safer Water Co. home">
+      <svg class="brand__mark" viewBox="0 0 40 50" width="26" height="32" aria-hidden="true">
+        <path d="M20 3 C20 3 5 22 5 32 a15 15 0 0 0 30 0 C35 22 20 3 20 3Z"/>
+        <line x1="20" y1="0" x2="20" y2="50"/><line x1="2" y1="32" x2="38" y2="32"/>
+      </svg>
+      <span class="brand__name">Safer Water Co.</span>
+      <span class="brand__sub">Bradenton, FL · Est. 2026</span>
     </a>
-    <nav class="nav__links" aria-label="Primary">
-      <a href="#water">Your Water</a>
-      <a href="#journey">How It Works</a>
-      <a href="#systems">Systems</a>
-      <a href="#compare">Why Us</a>
-      <a href="#area">Service Area</a>
+    <div class="hdr__sheet" id="sheetIndicator"><span class="hdr__sheetLbl">Sheet</span><strong id="sheetNo">01</strong><span class="hdr__sheetName" id="sheetName">Cover</span></div>
+    <nav class="hdr__nav" aria-label="Primary">
+      <a href="#water" data-sheet="02">Your water</a>
+      <a href="#journey" data-sheet="03">System</a>
+      <a href="#systems" data-sheet="05">Packages</a>
+      <a href="#compare" data-sheet="07">Spec</a>
+      <a href="#area" data-sheet="09">Area</a>
     </nav>
-    <div class="nav__cta">
-      <a class="nav__phone" href="tel:+19410000000">(941) 000-0000</a>
-      <a class="btn btn--primary btn--sm" href="#test">Free Water Test</a>
+    <div class="hdr__cta">
+      <a class="hdr__phone" href="tel:+19410000000">(941) 000-0000</a>
+      <a class="btn btn--ink btn--sm" href="#test">Free water test</a>
     </div>
-    <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+    <button class="hdr__burger" id="burger" aria-label="Open sheet index" aria-expanded="false"><span></span><span></span><span></span></button>
   </header>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#water">Your Water</a>
-    <a href="#journey">How It Works</a>
-    <a href="#systems">Systems</a>
-    <a href="#compare">Why Us</a>
-    <a href="#area">Service Area</a>
-    <a class="btn btn--primary" href="#test">Free Water Test</a>
+  <div class="index" id="mobileMenu" aria-label="Sheet index">
+    <div class="index__title">Sheet index</div>
+    <a href="#water"><b>02</b> Your water</a>
+    <a href="#journey"><b>03</b> System section</a>
+    <a href="#beforeafter"><b>04</b> Existing vs. proposed</a>
+    <a href="#systems"><b>05</b> Packages</a>
+    <a href="#calc"><b>06</b> Cost estimate</a>
+    <a href="#compare"><b>07</b> Specification</a>
+    <a href="#area"><b>09</b> Service area</a>
+    <a href="#test" class="index__cta"><b>10</b> Request site visit →</a>
   </div>
 
   <main id="top">
-    <!-- ================= HERO ================= -->
-    <section class="hero" id="hero">
+    <!-- ================= SHEET 01 · COVER ================= -->
+    <section class="hero sheet" id="hero" data-sheet="01" data-name="Cover">
       <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+
+      <!-- drafting annotations around the 3D drop -->
+      <div class="hero__notes" aria-hidden="true">
+        <div class="note note--fig"><span>FIG. 1</span>H₂O droplet, scale 1:1</div>
+        <div class="dim dim--h"><i></i><span>Ø 2.6 mm</span><i></i></div>
+        <div class="dim dim--v"><i></i><span>99.9% Cl⁻ removed</span><i></i></div>
+        <div class="note note--rev">REV A · 10.12.26</div>
+      </div>
+
       <div class="hero__content">
-        <div class="hero__eyebrow reveal">
-          <span class="pulse"></span> Bradenton · Lakewood Ranch · Palmetto · Anna Maria · Sarasota
-        </div>
+        <div class="stamp-line reveal"><span class="tick"></span>DWG 01 · Whole-home water treatment · Bradenton, Lakewood Ranch, Palmetto, Anna Maria, Sarasota</div>
         <h1 class="hero__title">
-          <span class="line"><span>Water that</span></span>
-          <span class="line"><span><em>feels</em> different.</span></span>
+          <span class="line"><span>Clean water,</span></span>
+          <span class="line"><span><span class="mark" data-mark="underline">drawn to spec.</span></span></span>
         </h1>
         <p class="hero__sub reveal">
-          Florida water is hard, chlorinated and full of surprises. We engineer whole-home
-          systems that turn every tap in your house into the cleanest glass you've ever poured.
+          Florida water is hard, chlorinated and full of surprises. We test yours, draw up a
+          system for your exact house, and install it in a day. No catalog. No pushy sales call.
         </p>
         <div class="hero__actions reveal">
-          <a class="btn btn--primary btn--lg magnetic" href="#test">
-            <span>Book a free water test</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn btn--ghost btn--lg magnetic" href="#journey">See how it works</a>
+          <a class="btn btn--ink btn--lg" href="#test"><span>Book a free water test</span><b>→</b></a>
+          <a class="btn btn--paper btn--lg" href="#journey"><span>See the system drawing</span><b>§</b></a>
         </div>
-        <div class="hero__stats reveal">
-          <div><strong data-count="99.9" data-suffix="%" data-decimals="1">0</strong><span>of chlorine &amp; chloramine removed</span></div>
-          <div><strong data-count="20" data-suffix="+">0</strong><span>contaminants targeted</span></div>
-          <div><strong data-count="10" data-suffix="-yr">0</strong><span>system warranty</span></div>
-        </div>
+
+        <table class="spec reveal" aria-label="Key specifications">
+          <tbody>
+            <tr><th>Chlorine &amp; chloramine removed</th><td><b data-count="99.9" data-decimals="1">0</b>%</td></tr>
+            <tr><th>Contaminants targeted</th><td><b data-count="20">0</b>+</td></tr>
+            <tr><th>System warranty</th><td><b data-count="10">0</b> yr</td></tr>
+            <tr><th>Install time</th><td><b data-count="1">0</b> day</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="hero__scroll" aria-hidden="true">
-        <span></span> scroll
-      </div>
+
+      <div class="hero__scroll" aria-hidden="true"><span class="hero__scrollLine"></span><span>Scroll to sheet 02</span></div>
     </section>
 
-    <!-- ================= MARQUEE ================= -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span>Whole-home filtration</span><i>◆</i><span>Salt-free conditioning</span><i>◆</i><span>Reverse osmosis</span><i>◆</i><span>Well water treatment</span><i>◆</i><span>UV sterilization</span><i>◆</i><span>Softening</span><i>◆</i>
-        <span>Whole-home filtration</span><i>◆</i><span>Salt-free conditioning</span><i>◆</i><span>Reverse osmosis</span><i>◆</i><span>Well water treatment</span><i>◆</i><span>UV sterilization</span><i>◆</i><span>Softening</span><i>◆</i>
-      </div>
+    <!-- ================= LEGEND STRIP ================= -->
+    <div class="legend" aria-hidden="true">
+      <div class="legend__rule"></div>
+      <ul class="legend__items">
+        <li><i>01</i>Whole-home filtration</li>
+        <li><i>02</i>Salt-free conditioning</li>
+        <li><i>03</i>Reverse osmosis</li>
+        <li><i>04</i>Well water treatment</li>
+        <li><i>05</i>UV sterilization</li>
+        <li><i>06</i>Softening</li>
+      </ul>
     </div>
 
-    <!-- ================= YOUR WATER (interactive drop) ================= -->
-    <section class="water section" id="water">
+    <!-- ================= SHEET 02 · YOUR WATER ================= -->
+    <section class="sheet water" id="water" data-sheet="02" data-name="Your water">
       <div class="container">
-        <div class="section__head">
-          <span class="kicker reveal">What's actually in Bradenton water</span>
-          <h2 class="reveal">Every drop tells a story.<br/><em>Tap one to read it.</em></h2>
-          <p class="reveal">Manatee County blends deep Floridan Aquifer groundwater with Lake Manatee reservoir water, then disinfects it with chlorine. That's great for killing germs. It's less great for your skin, your pipes, and your coffee.</p>
-        </div>
+        <header class="shead">
+          <div class="shead__id reveal"><b>02</b><span>Site conditions</span></div>
+          <h2 class="reveal">What's actually coming out of a Bradenton tap.</h2>
+          <p class="reveal">Manatee County blends deep Floridan Aquifer groundwater with Lake Manatee reservoir water, then disinfects it with chlorine. Great for killing germs. Less great for your skin, your pipes and your coffee. Tap a callout to read the detail.</p>
+        </header>
 
-        <div class="drop-lab">
-          <div class="drop-lab__visual reveal">
-            <svg class="drop" viewBox="0 0 400 500" aria-label="Interactive water drop showing common contaminants">
+        <div class="lab">
+          <div class="lab__fig reveal">
+            <svg class="dropfig" viewBox="0 0 440 540" aria-label="Line drawing of a water drop with numbered callouts">
               <defs>
-                <radialGradient id="dropGrad" cx="40%" cy="30%" r="80%">
-                  <stop offset="0" stop-color="#b9f6ff" stop-opacity=".9"/>
-                  <stop offset=".45" stop-color="#2fb0ff" stop-opacity=".55"/>
-                  <stop offset="1" stop-color="#062a55" stop-opacity=".95"/>
-                </radialGradient>
-                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="8" result="b"/>
-                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-                <clipPath id="dropClip"><path d="M200 20 C200 20 60 200 60 310 a140 140 0 0 0 280 0 C340 200 200 20 200 20Z"/></clipPath>
+                <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="var(--ink)" stroke-width="0.8" opacity=".35"/>
+                </pattern>
+                <clipPath id="dropClip"><path d="M220 30 C220 30 70 220 70 335 a150 150 0 0 0 300 0 C370 220 220 30 220 30Z"/></clipPath>
               </defs>
-              <path class="drop__body" d="M200 20 C200 20 60 200 60 310 a140 140 0 0 0 280 0 C340 200 200 20 200 20Z" fill="url(#dropGrad)" stroke="rgba(190,245,255,.6)" stroke-width="1.5"/>
-              <g clip-path="url(#dropClip)" class="drop__water">
-                <path class="wave wave--1" d="M-400 330 Q-300 310 -200 330 T0 330 T200 330 T400 330 T600 330 T800 330 V600 H-400Z" fill="rgba(79,216,255,.25)"/>
-                <path class="wave wave--2" d="M-400 350 Q-300 330 -200 350 T0 350 T200 350 T400 350 T600 350 T800 350 V600 H-400Z" fill="rgba(79,216,255,.25)"/>
+              <!-- axis lines -->
+              <line class="axis" x1="220" y1="10" x2="220" y2="530"/>
+              <line class="axis" x1="30" y1="335" x2="410" y2="335"/>
+              <!-- hatch water level, animates -->
+              <g clip-path="url(#dropClip)">
+                <rect class="dropfig__fill" x="0" y="300" width="440" height="300" fill="url(#hatch)"/>
+                <path class="dropfig__wave" d="M-440 300 Q-330 285 -220 300 T0 300 T220 300 T440 300 T660 300 T880 300" fill="none"/>
               </g>
-              <ellipse cx="150" cy="200" rx="22" ry="60" fill="rgba(255,255,255,.35)" transform="rotate(-20 150 200)"/>
-
-              <g class="hotspots">
-                <g class="hotspot" data-key="hardness" transform="translate(140 300)"><circle r="18" filter="url(#glow)"/><circle r="6"/></g>
-                <g class="hotspot" data-key="chlorine" transform="translate(240 240)"><circle r="18" filter="url(#glow)"/><circle r="6"/></g>
-                <g class="hotspot" data-key="tthm" transform="translate(205 370)"><circle r="18" filter="url(#glow)"/><circle r="6"/></g>
-                <g class="hotspot" data-key="sulfur" transform="translate(275 330)"><circle r="18" filter="url(#glow)"/><circle r="6"/></g>
-                <g class="hotspot" data-key="pfas" transform="translate(135 400)"><circle r="18" filter="url(#glow)"/><circle r="6"/></g>
-                <g class="hotspot" data-key="sediment" transform="translate(200 150)"><circle r="18" filter="url(#glow)"/><circle r="6"/></g>
+              <path class="dropfig__outline draw-on" d="M220 30 C220 30 70 220 70 335 a150 150 0 0 0 300 0 C370 220 220 30 220 30Z"/>
+              <path class="dropfig__inner draw-on" d="M120 335 a100 100 0 0 0 100 100"/>
+              <!-- dimension -->
+              <g class="dimline">
+                <line x1="70" y1="505" x2="370" y2="505"/><line x1="70" y1="495" x2="70" y2="515"/><line x1="370" y1="495" x2="370" y2="515"/>
+                <text x="220" y="498">Ø 300</text>
+              </g>
+              <!-- callouts -->
+              <g class="callouts">
+                <g class="callout" data-key="hardness" transform="translate(150 330)"><line x1="0" y1="0" x2="-70" y2="-40"/><circle r="13"/><text>1</text></g>
+                <g class="callout" data-key="chlorine" transform="translate(270 255)"><line x1="0" y1="0" x2="80" y2="-50"/><circle r="13"/><text>2</text></g>
+                <g class="callout" data-key="tthm" transform="translate(225 400)"><line x1="0" y1="0" x2="90" y2="60"/><circle r="13"/><text>3</text></g>
+                <g class="callout" data-key="sulfur" transform="translate(305 355)"><line x1="0" y1="0" x2="80" y2="10"/><circle r="13"/><text>4</text></g>
+                <g class="callout" data-key="pfas" transform="translate(150 425)"><line x1="0" y1="0" x2="-85" y2="40"/><circle r="13"/><text>5</text></g>
+                <g class="callout" data-key="sediment" transform="translate(220 165)"><line x1="0" y1="0" x2="-110" y2="-30"/><circle r="13"/><text>6</text></g>
               </g>
             </svg>
+            <div class="fig-cap">FIG. 2 — Typical municipal supply, Manatee Co. Not to scale.</div>
           </div>
 
-          <div class="drop-lab__panel reveal">
-            <div class="drop-lab__tabs" role="tablist" aria-label="Contaminants">
-              <button role="tab" data-key="hardness" class="is-active">Hardness</button>
-              <button role="tab" data-key="chlorine">Chlorine</button>
-              <button role="tab" data-key="tthm">TTHMs</button>
-              <button role="tab" data-key="sulfur">Sulfur</button>
-              <button role="tab" data-key="pfas">PFAS</button>
-              <button role="tab" data-key="sediment">Sediment</button>
+          <div class="lab__panel reveal">
+            <div class="tabs" role="tablist" aria-label="Contaminants">
+              <button role="tab" data-key="hardness" class="is-active"><i>1</i>Hardness</button>
+              <button role="tab" data-key="chlorine"><i>2</i>Chlorine</button>
+              <button role="tab" data-key="tthm"><i>3</i>TTHMs</button>
+              <button role="tab" data-key="sulfur"><i>4</i>Sulfur</button>
+              <button role="tab" data-key="pfas"><i>5</i>PFAS</button>
+              <button role="tab" data-key="sediment"><i>6</i>Sediment</button>
             </div>
-            <div class="drop-lab__card" id="dropCard">
-              <div class="drop-lab__meter"><div class="drop-lab__meterFill" id="meterFill"></div></div>
-              <div class="drop-lab__level" id="dropLevel">Level: High</div>
+            <article class="panel" id="dropCard">
+              <div class="panel__head">
+                <span class="panel__no" id="dropNo">DETAIL 1</span>
+                <span class="gauge" aria-hidden="true"><i id="meterFill"></i><em></em></span>
+                <span class="panel__level" id="dropLevel">Level · High</span>
+              </div>
               <h3 id="dropTitle">Hard water (calcium &amp; magnesium)</h3>
               <p id="dropBody">Floridan Aquifer water picks up dissolved limestone on its way to your tap. That's the white crust on your faucets, the film on your glassware, and the reason your water heater works harder every year.</p>
               <ul id="dropEffects" class="effects">
@@ -176,289 +196,224 @@
                 <li>Dry skin, dull hair</li>
                 <li>Up to 2× more soap &amp; detergent</li>
               </ul>
-              <div class="drop-lab__fix"><span>Our fix</span><strong id="dropFix">High-efficiency softener or salt-free conditioner</strong></div>
-            </div>
-            <p class="footnote">Figures are regional estimates for illustration. Your free in-home test gives you the real numbers for your tap.</p>
+              <div class="panel__fix"><span>Specified remedy</span><strong id="dropFix">High-efficiency softener or salt-free conditioner</strong></div>
+            </article>
+            <p class="fine">Figures are regional estimates for illustration. Your free in-home test gives you the real numbers for your tap.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= JOURNEY (scroll-driven 3D) ================= -->
-    <section class="journey" id="journey">
+    <!-- ================= SHEET 03 · SYSTEM SECTION (3D) ================= -->
+    <section class="journey sheet" id="journey" data-sheet="03" data-name="System section A-A">
       <div class="journey__pin">
         <canvas class="journey__canvas" id="journeyCanvas" aria-hidden="true"></canvas>
         <div class="journey__overlay">
-          <div class="journey__progress" aria-hidden="true">
-            <span class="journey__dot" data-i="0"></span>
-            <span class="journey__dot" data-i="1"></span>
-            <span class="journey__dot" data-i="2"></span>
-            <span class="journey__dot" data-i="3"></span>
-            <span class="journey__dot" data-i="4"></span>
+          <div class="journey__title">
+            <div class="shead__id"><b>03</b><span>Section A-A · Flow left to right</span></div>
+            <h2>Follow one drop through the system.</h2>
+          </div>
+          <div class="journey__track" aria-hidden="true">
+            <span class="journey__stn" data-i="0">STN 1</span><span class="journey__stn" data-i="1">STN 2</span><span class="journey__stn" data-i="2">STN 3</span><span class="journey__stn" data-i="3">STN 4</span><span class="journey__stn" data-i="4">STN 5</span>
+            <i class="journey__cursor" id="journeyCursor"></i>
           </div>
           <div class="journey__steps">
-            <article class="journey__step is-active" data-i="0">
-              <span class="journey__num">Stage 01</span>
-              <h3>Sediment capture</h3>
-              <p>Sand, silt, rust and grit are stopped at the door. A multi-layer sediment stage protects everything downstream, including your appliances.</p>
-            </article>
-            <article class="journey__step" data-i="1">
-              <span class="journey__num">Stage 02</span>
-              <h3>Catalytic carbon</h3>
-              <p>High-grade catalytic carbon pulls out chlorine, chloramine, trihalomethanes and the pool smell. This is where the taste changes.</p>
-            </article>
-            <article class="journey__step" data-i="2">
-              <span class="journey__num">Stage 03</span>
-              <h3>Softening &amp; conditioning</h3>
-              <p>Calcium and magnesium are neutralized so scale stops forming. Softer skin, brighter laundry, and a water heater that lasts.</p>
-            </article>
-            <article class="journey__step" data-i="3">
-              <span class="journey__num">Stage 04</span>
-              <h3>UV sterilization</h3>
-              <p>Ultraviolet light neutralizes bacteria, viruses and cysts without chemicals. Essential for well water, smart for everyone.</p>
-            </article>
-            <article class="journey__step" data-i="4">
-              <span class="journey__num">Stage 05</span>
-              <h3>Reverse osmosis at the tap</h3>
-              <p>An under-sink RO stage polishes your drinking water to near-pure, removing PFAS, lead, arsenic and dissolved solids down to the molecule.</p>
-            </article>
-          </div>
-          <div class="journey__title">
-            <span class="kicker">The journey</span>
-            <h2>Follow a single drop<br/><em>through your new system.</em></h2>
+            <article class="callout-card is-active" data-i="0"><span class="callout-card__no">Detail 1 / Sediment capture</span><h3>Grit stops at the door.</h3><p>Sand, silt, rust and construction grit are caught in a multi-layer sediment stage so nothing downstream, including your appliances, has to deal with them.</p></article>
+            <article class="callout-card" data-i="1"><span class="callout-card__no">Detail 2 / Catalytic carbon</span><h3>Where the taste changes.</h3><p>Catalytic carbon pulls out chlorine, chloramine, trihalomethanes and the pool smell. This stage alone is why the first shower feels different.</p></article>
+            <article class="callout-card" data-i="2"><span class="callout-card__no">Detail 3 / Softening</span><h3>Scale stops forming.</h3><p>Calcium and magnesium are exchanged out so crust stops building on fixtures and the water heater. Softer skin, brighter laundry.</p></article>
+            <article class="callout-card" data-i="3"><span class="callout-card__no">Detail 4 / UV sterilization</span><h3>No chemicals, no germs.</h3><p>Ultraviolet light neutralizes bacteria, viruses and cysts. Essential for well water, smart for everyone.</p></article>
+            <article class="callout-card" data-i="4"><span class="callout-card__no">Detail 5 / Reverse osmosis</span><h3>Drinking water to the molecule.</h3><p>An under-sink RO stage removes PFAS, lead, arsenic and dissolved solids, then adds minerals back for taste.</p></article>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= BEFORE / AFTER ================= -->
-    <section class="section compareSlider" id="beforeafter">
+    <!-- ================= SHEET 04 · EXISTING vs PROPOSED ================= -->
+    <section class="sheet ba-sheet" id="beforeafter" data-sheet="04" data-name="Existing vs. proposed">
       <div class="container">
-        <div class="section__head section__head--left">
-          <span class="kicker reveal">See the difference</span>
-          <h2 class="reveal">Drag to compare.<br/><em>Same kitchen. Different water.</em></h2>
-        </div>
+        <header class="shead shead--left">
+          <div class="shead__id reveal"><b>04</b><span>Elevations</span></div>
+          <h2 class="reveal">Existing conditions vs. proposed. <span class="mark" data-mark="underline">Drag the section line.</span></h2>
+        </header>
         <div class="ba reveal" id="ba">
           <div class="ba__side ba__side--before">
             <div class="ba__scene">
-              <div class="ba__glass"><div class="ba__liquid"></div><div class="ba__sediment"></div></div>
-              <div class="ba__faucet"><div class="ba__scale"></div></div>
-              <ul class="ba__tags">
-                <li>Chlorine smell</li><li>Spotty glassware</li><li>Scale on fixtures</li><li>Dry skin</li>
-              </ul>
+              <svg viewBox="0 0 600 420" class="ba__draw" aria-hidden="true">
+                <g class="ba__faucet"><path d="M180 90 h240 v22 h-100 v60 h-40 v-60 h-100z"/><path class="ba__scaleMarks" d="M190 86 l6 -8 M230 84 l5 -9 M300 84 l4 -10 M350 86 l6 -9 M400 85 l5 -9 M290 170 l-7 8 M320 172 l6 8"/></g>
+                <g class="ba__glass"><path d="M240 230 h120 l-10 150 h-100z"/><path class="ba__liquid" d="M250 300 h100 l-6 76 h-88z"/><g class="ba__grit"><circle cx="270" cy="320" r="2"/><circle cx="300" cy="340" r="2.5"/><circle cx="330" cy="310" r="1.6"/><circle cx="288" cy="360" r="2"/><circle cx="318" cy="365" r="1.8"/><circle cx="260" cy="350" r="1.5"/></g></g>
+                <g class="ba__pencil"><ellipse cx="300" cy="120" rx="150" ry="55"/><path d="M455 85 l40 -30"/><text x="500" y="52">scale build-up</text><path d="M372 330 l60 10"/><text x="438" y="345">sediment</text></g>
+              </svg>
+              <ul class="ba__tags"><li>Chlorine smell</li><li>Spotty glassware</li><li>Scale on fixtures</li><li>Dry skin</li></ul>
             </div>
-            <span class="ba__label">Before</span>
+            <span class="ba__label">Existing</span>
           </div>
           <div class="ba__side ba__side--after">
             <div class="ba__scene">
-              <div class="ba__glass"><div class="ba__liquid"></div><div class="ba__shine"></div></div>
-              <div class="ba__faucet"></div>
-              <ul class="ba__tags">
-                <li>Crisp, clean taste</li><li>Spotless glass</li><li>Shiny fixtures</li><li>Soft skin &amp; hair</li>
-              </ul>
+              <svg viewBox="0 0 600 420" class="ba__draw" aria-hidden="true">
+                <g class="ba__faucet"><path d="M180 90 h240 v22 h-100 v60 h-40 v-60 h-100z"/></g>
+                <g class="ba__glass"><path d="M240 230 h120 l-10 150 h-100z"/><path class="ba__liquid" d="M250 300 h100 l-6 76 h-88z"/><path class="ba__shine" d="M256 306 v60"/></g>
+                <g class="ba__check"><path d="M470 300 l16 16 l34 -40"/><text x="447" y="345">to spec</text></g>
+              </svg>
+              <ul class="ba__tags"><li>Crisp, clean taste</li><li>Spotless glass</li><li>Shiny fixtures</li><li>Soft skin &amp; hair</li></ul>
             </div>
-            <span class="ba__label">After</span>
+            <span class="ba__label">Proposed</span>
           </div>
-          <div class="ba__handle" id="baHandle" role="slider" aria-label="Before and after comparison" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
-            <span class="ba__handleBtn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
-            </span>
+          <div class="ba__handle" id="baHandle" role="slider" aria-label="Existing and proposed comparison" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
+            <span class="ba__handleTag">A</span><span class="ba__handleBtn">⟷</span><span class="ba__handleTag ba__handleTag--b">A</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= SYSTEMS ================= -->
-    <section class="section systems" id="systems">
+    <!-- ================= SHEET 05 · PACKAGES ================= -->
+    <section class="sheet systems" id="systems" data-sheet="05" data-name="Packages">
       <div class="container">
-        <div class="section__head">
-          <span class="kicker reveal">Systems</span>
-          <h2 class="reveal">Built for your house,<br/><em>not a catalog.</em></h2>
-          <p class="reveal">Every home gets a custom design based on your test results. These are the three starting points most Bradenton families choose.</p>
-        </div>
-        <div class="cards">
-          <article class="card tilt reveal">
-            <div class="card__glow"></div>
-            <div class="card__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="14" y="6" width="20" height="36" rx="6"/><path d="M14 18h20M14 30h20"/><path d="M24 6V2M24 46v-4"/></svg>
+        <header class="shead">
+          <div class="shead__id reveal"><b>05</b><span>Equipment schedules</span></div>
+          <h2 class="reveal">Three starting points. Every one gets redrawn for your house.</h2>
+          <p class="reveal">Your test results decide the final design. These are the schedules most Bradenton families start from.</p>
+        </header>
+        <div class="sheets">
+          <article class="dwg reveal">
+            <div class="dwg__corner"></div>
+            <div class="dwg__body">
+              <svg class="dwg__icon" viewBox="0 0 80 80" aria-hidden="true"><rect x="24" y="8" width="32" height="64" rx="6"/><line x1="24" y1="28" x2="56" y2="28"/><line x1="24" y1="52" x2="56" y2="52"/><line x1="40" y1="0" x2="40" y2="8"/><line x1="40" y1="72" x2="40" y2="80"/><path class="dwg__dim" d="M66 8 v64 M62 8 h8 M62 72 h8"/></svg>
+              <span class="dwg__tag">Most installed</span>
+              <h3>Whole-Home Carbon + Softener</h3>
+              <p>Chlorine-free, scale-free water at every tap. The upgrade you feel in the shower on day one.</p>
+              <ol class="bom"><li><i>1.1</i>Catalytic carbon tank</li><li><i>1.2</i>High-efficiency softener</li><li><i>1.3</i>Smart valve w/ app monitoring</li></ol>
             </div>
-            <span class="card__tag">Most popular</span>
-            <h3>Whole-Home Carbon + Softener</h3>
-            <p>Chlorine-free, scale-free water at every tap. The upgrade you feel in the shower on day one.</p>
-            <ul>
-              <li>Catalytic carbon filtration</li>
-              <li>High-efficiency softener</li>
-              <li>Smart valve with app monitoring</li>
-            </ul>
-            <a href="#test" class="card__link">Get my quote <span>→</span></a>
+            <div class="tb"><div><span>DWG</span>SW-101</div><div><span>Scale</span>Per site</div><div><span>Rev</span>A</div><a href="#test">Quote →</a></div>
           </article>
-          <article class="card tilt card--featured reveal">
-            <div class="card__glow"></div>
-            <div class="card__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4 C24 4 10 22 10 30a14 14 0 0 0 28 0C38 22 24 4 24 4Z"/><path d="M18 30a6 6 0 0 0 6 6"/></svg>
+          <article class="dwg dwg--rec reveal">
+            <div class="dwg__corner"></div>
+            <div class="stamp stamp--rec" aria-hidden="true">Recommended</div>
+            <div class="dwg__body">
+              <svg class="dwg__icon" viewBox="0 0 80 80" aria-hidden="true"><path d="M40 6 C40 6 16 36 16 50 a24 24 0 0 0 48 0 C64 36 40 6 40 6Z"/><path d="M28 50 a12 12 0 0 0 12 12"/><line x1="40" y1="0" x2="40" y2="80"/><path class="dwg__dim" d="M8 50 h64"/></svg>
+              <span class="dwg__tag">Complete protection</span>
+              <h3>Total Home + RO Drinking</h3>
+              <p>Everything in the whole-home schedule, plus UV and a 5-stage reverse osmosis system for near-pure drinking water.</p>
+              <ol class="bom"><li><i>2.1</i>Whole-home carbon + softening</li><li><i>2.2</i>UV sterilizer</li><li><i>2.3</i>Under-sink RO w/ remineralization</li></ol>
             </div>
-            <span class="card__tag">Complete protection</span>
-            <h3>Total Home + RO Drinking</h3>
-            <p>Everything in the whole-home package, plus UV and a 5-stage reverse osmosis system for near-pure drinking water.</p>
-            <ul>
-              <li>Whole-home carbon + softening</li>
-              <li>UV sterilization</li>
-              <li>Under-sink RO with remineralization</li>
-            </ul>
-            <a href="#test" class="card__link">Get my quote <span>→</span></a>
+            <div class="tb"><div><span>DWG</span>SW-102</div><div><span>Scale</span>Per site</div><div><span>Rev</span>A</div><a href="#test">Quote →</a></div>
           </article>
-          <article class="card tilt reveal">
-            <div class="card__glow"></div>
-            <div class="card__icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="18"/><path d="M24 6v36M6 24h36M11 11l26 26M37 11L11 37" opacity=".5"/></svg>
+          <article class="dwg reveal">
+            <div class="dwg__corner"></div>
+            <div class="dwg__body">
+              <svg class="dwg__icon" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="30"/><line x1="40" y1="4" x2="40" y2="76"/><line x1="4" y1="40" x2="76" y2="40"/><circle cx="40" cy="40" r="12"/><path class="dwg__dim" d="M10 70 l60 -60"/></svg>
+              <span class="dwg__tag">Private well</span>
+              <h3>Well Water Rescue</h3>
+              <p>Iron, sulfur (that rotten-egg smell), tannins and bacteria handled in one engineered stack.</p>
+              <ol class="bom"><li><i>3.1</i>Air-injection iron &amp; sulfur removal</li><li><i>3.2</i>Sediment + carbon + UV</li><li><i>3.3</i>Optional softening</li></ol>
             </div>
-            <span class="card__tag">Well water</span>
-            <h3>Well Water Rescue</h3>
-            <p>Iron, sulfur (that rotten-egg smell), tannins and bacteria handled in one engineered stack.</p>
-            <ul>
-              <li>Air-injection iron &amp; sulfur removal</li>
-              <li>Sediment + carbon + UV</li>
-              <li>Optional softening</li>
-            </ul>
-            <a href="#test" class="card__link">Get my quote <span>→</span></a>
+            <div class="tb"><div><span>DWG</span>SW-103</div><div><span>Scale</span>Per site</div><div><span>Rev</span>A</div><a href="#test">Quote →</a></div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ================= CALCULATOR ================= -->
-    <section class="section calc" id="calc">
+    <!-- ================= SHEET 06 · COST ESTIMATE ================= -->
+    <section class="sheet calc" id="calc" data-sheet="06" data-name="Cost of doing nothing">
       <div class="container calc__grid">
         <div class="calc__copy">
-          <span class="kicker reveal">The hidden cost of hard water</span>
-          <h2 class="reveal">What is your water<br/><em>quietly costing you?</em></h2>
-          <p class="reveal">Hard, chlorinated water eats appliances, doubles your soap bill and shortens the life of your water heater. Slide to estimate what it costs your household every year.</p>
-          <div class="calc__controls reveal">
-            <label>
-              <span>People in your home <output id="outPeople">3</output></span>
-              <input type="range" id="inPeople" min="1" max="8" value="3" />
-            </label>
-            <label>
-              <span>Water hardness (grains per gallon) <output id="outHard">12</output></span>
-              <input type="range" id="inHard" min="3" max="25" value="12" />
-            </label>
-            <label>
-              <span>Bottled water per week (cases) <output id="outBottle">2</output></span>
-              <input type="range" id="inBottle" min="0" max="8" value="2" />
-            </label>
+          <div class="shead__id reveal"><b>06</b><span>Takeoff · Annual</span></div>
+          <h2 class="reveal">What your water is <span class="mark" data-mark="circle">quietly</span> costing you.</h2>
+          <p class="reveal">Hard, chlorinated water eats appliances, doubles your soap bill and shortens the life of your water heater. Set the dials to estimate what it costs your household every year.</p>
+          <div class="dials reveal">
+            <label class="dial"><span class="dial__lbl">People in household</span><span class="dial__val"><output id="outPeople">3</output></span><input type="range" id="inPeople" min="1" max="8" value="3" /></label>
+            <label class="dial"><span class="dial__lbl">Hardness, grains / gal</span><span class="dial__val"><output id="outHard">12</output> gpg</span><input type="range" id="inHard" min="3" max="25" value="12" /></label>
+            <label class="dial"><span class="dial__lbl">Bottled water, cases / wk</span><span class="dial__val"><output id="outBottle">2</output></span><input type="range" id="inBottle" min="0" max="8" value="2" /></label>
           </div>
         </div>
-        <div class="calc__result reveal">
-          <div class="calc__ring">
-            <svg viewBox="0 0 200 200" aria-hidden="true">
-              <circle cx="100" cy="100" r="86" class="calc__ringBg"/>
-              <circle cx="100" cy="100" r="86" class="calc__ringFg" id="ringFg"/>
-            </svg>
-            <div class="calc__total">
-              <span>Estimated yearly cost</span>
-              <strong id="calcTotal">$0</strong>
-              <small>of doing nothing</small>
-            </div>
-          </div>
-          <ul class="calc__breakdown">
-            <li><span>Soap, detergent &amp; cleaning</span><strong id="cSoap">$0</strong></li>
-            <li><span>Appliance wear &amp; energy loss</span><strong id="cAppliance">$0</strong></li>
-            <li><span>Bottled water</span><strong id="cBottle">$0</strong></li>
-            <li><span>Plumbing &amp; fixture damage</span><strong id="cPlumb">$0</strong></li>
-          </ul>
-          <a href="#test" class="btn btn--primary magnetic">Stop the leak in my budget</a>
-          <p class="footnote">Estimates based on industry averages. Not a quote.</p>
+        <div class="takeoff reveal">
+          <div class="takeoff__head"><span>Item</span><span>Basis</span><span>Annual</span></div>
+          <div class="takeoff__row"><span>Soap, detergent &amp; cleaners</span><span>hardness × people</span><strong id="cSoap">$0</strong><i class="bar" id="bSoap"></i></div>
+          <div class="takeoff__row"><span>Appliance wear &amp; energy loss</span><span>scale on elements</span><strong id="cAppliance">$0</strong><i class="bar" id="bAppliance"></i></div>
+          <div class="takeoff__row"><span>Bottled water</span><span>cases × 52</span><strong id="cBottle">$0</strong><i class="bar" id="bBottle"></i></div>
+          <div class="takeoff__row"><span>Plumbing &amp; fixture damage</span><span>valves, aerators</span><strong id="cPlumb">$0</strong><i class="bar" id="bPlumb"></i></div>
+          <div class="takeoff__total"><span>Estimated cost of doing nothing</span><strong id="calcTotal">$0</strong><em>/ yr</em></div>
+          <div class="stamp stamp--est" aria-hidden="true">Estimate only — not a quote</div>
+          <a href="#test" class="btn btn--ink">Get the real number for my house<b>→</b></a>
         </div>
       </div>
     </section>
 
-    <!-- ================= COMPARE ================= -->
-    <section class="section compare" id="compare">
+    <!-- ================= SHEET 07 · SPECIFICATION ================= -->
+    <section class="sheet compare" id="compare" data-sheet="07" data-name="Specification">
       <div class="container">
-        <div class="section__head">
-          <span class="kicker reveal">Why Safer Water Co.</span>
-          <h2 class="reveal">No franchise fees.<br/><em>No pushy sales. No mystery pricing.</em></h2>
-          <p class="reveal">We're a local Bradenton company, not a national brand's dealer. That means better equipment for less, a real person on the phone, and a price you'll see before anyone sets foot in your house.</p>
-        </div>
-        <div class="table reveal">
-          <div class="table__row table__row--head">
-            <div></div>
-            <div class="table__us">Safer Water Co.</div>
-            <div>National brands</div>
-            <div>Plumbers &amp; big-box</div>
-          </div>
-          <div class="table__row"><div>Free in-home water test</div><div class="table__us yes">Yes</div><div class="yes">Yes</div><div class="no">Rarely</div></div>
-          <div class="table__row"><div>Upfront, published pricing</div><div class="table__us yes">Yes</div><div class="no">No</div><div class="maybe">Sometimes</div></div>
-          <div class="table__row"><div>Custom design from your test</div><div class="table__us yes">Yes</div><div class="maybe">Limited</div><div class="no">Off the shelf</div></div>
-          <div class="table__row"><div>Non-proprietary parts</div><div class="table__us yes">Yes</div><div class="no">Locked in</div><div class="yes">Yes</div></div>
-          <div class="table__row"><div>Licensed install &amp; permit</div><div class="table__us yes">Yes</div><div class="yes">Yes</div><div class="maybe">Varies</div></div>
-          <div class="table__row"><div>Lifetime support, local team</div><div class="table__us yes">Yes</div><div class="maybe">Call center</div><div class="no">No</div></div>
-          <div class="table__row"><div>No high-pressure sales visit</div><div class="table__us yes">Never</div><div class="no">Expect one</div><div class="yes">Yes</div></div>
+        <header class="shead">
+          <div class="shead__id reveal"><b>07</b><span>Specification · Division 22</span></div>
+          <h2 class="reveal">No franchise fees. No pushy sales. No mystery pricing.</h2>
+          <p class="reveal">We're a local Bradenton company, not a national brand's dealer. Better equipment for less, a real person on the phone, and a price you see before anyone sets foot in your house.</p>
+        </header>
+        <div class="specgrid reveal">
+          <div class="specgrid__row specgrid__row--head"><div>Requirement</div><div class="us">Safer Water Co.</div><div>National brands</div><div>Plumbers &amp; big-box</div></div>
+          <div class="specgrid__row"><div><i>7.1</i>Free in-home water test</div><div class="us ok">Yes</div><div class="ok">Yes</div><div class="no">Rarely</div></div>
+          <div class="specgrid__row"><div><i>7.2</i>Upfront, published pricing</div><div class="us ok">Yes</div><div class="no">No</div><div class="part">Sometimes</div></div>
+          <div class="specgrid__row"><div><i>7.3</i>Custom design from your test</div><div class="us ok">Yes</div><div class="part">Limited</div><div class="no">Off the shelf</div></div>
+          <div class="specgrid__row"><div><i>7.4</i>Non-proprietary parts</div><div class="us ok">Yes</div><div class="no">Locked in</div><div class="ok">Yes</div></div>
+          <div class="specgrid__row"><div><i>7.5</i>Licensed install &amp; permit</div><div class="us ok">Yes</div><div class="ok">Yes</div><div class="part">Varies</div></div>
+          <div class="specgrid__row"><div><i>7.6</i>Lifetime support, local team</div><div class="us ok">Yes</div><div class="part">Call center</div><div class="no">No</div></div>
+          <div class="specgrid__row"><div><i>7.7</i>High-pressure sales visit</div><div class="us ok">Never</div><div class="no">Expect one</div><div class="ok">No</div></div>
         </div>
       </div>
     </section>
 
-    <!-- ================= PROCESS ================= -->
-    <section class="section process">
+    <!-- ================= SHEET 08 · DETAILS & FIELD NOTES ================= -->
+    <section class="sheet process" id="process" data-sheet="08" data-name="Details & field notes">
       <div class="container">
-        <div class="section__head section__head--left">
-          <span class="kicker reveal">How it works</span>
-          <h2 class="reveal">Four steps.<br/><em>One day of install.</em></h2>
-        </div>
-        <ol class="steps">
-          <li class="reveal"><span>01</span><h3>Free test</h3><p>We test hardness, chlorine, pH, TDS and more at your kitchen tap. 20 minutes, zero pressure.</p></li>
-          <li class="reveal"><span>02</span><h3>Custom design</h3><p>You get a written plan and a fixed price that matches your results. Not a catalog page.</p></li>
-          <li class="reveal"><span>03</span><h3>Install day</h3><p>Licensed, permitted, done in a day. We leave your garage cleaner than we found it.</p></li>
-          <li class="reveal"><span>04</span><h3>Lifetime support</h3><p>Annual check-ups, filter reminders, and a local number that a human answers.</p></li>
+        <header class="shead shead--left">
+          <div class="shead__id reveal"><b>08</b><span>Sequence of work</span></div>
+          <h2 class="reveal">Four details. One day of install.</h2>
+        </header>
+        <ol class="details">
+          <li class="reveal"><span class="details__no">1</span><h3>Free test</h3><p>We test hardness, chlorine, pH, TDS and more at your kitchen tap. 20 minutes, zero pressure.</p><i class="details__leader"></i></li>
+          <li class="reveal"><span class="details__no">2</span><h3>Drawn for your house</h3><p>You get a written plan and a fixed price that matches your results. Not a catalog page.</p><i class="details__leader"></i></li>
+          <li class="reveal"><span class="details__no">3</span><h3>Install day</h3><p>Licensed, permitted, done in a day. We leave your garage cleaner than we found it.</p><i class="details__leader"></i></li>
+          <li class="reveal"><span class="details__no">4</span><h3>Lifetime support</h3><p>Annual check-ups, filter reminders, and a local number a human answers.</p><i class="details__leader"></i></li>
         </ol>
-      </div>
-    </section>
 
-    <!-- ================= TESTIMONIALS ================= -->
-    <section class="section testimonials">
-      <div class="container">
-        <div class="section__head">
-          <span class="kicker reveal">Neighbors talking</span>
-          <h2 class="reveal">The reviews write<br/><em>themselves.</em></h2>
-        </div>
-        <div class="quotes">
-          <blockquote class="reveal"><p>"The first shower after install I genuinely thought the water heater was broken. It was just… soft. Our glasses come out of the dishwasher clear for the first time in years."</p><footer><strong>Placeholder review</strong><span>Lakewood Ranch</span></footer></blockquote>
-          <blockquote class="reveal"><p>"They showed me the test results, explained what each number meant, and gave me a price on the spot. No three-hour sales pitch. Installed the following Tuesday."</p><footer><strong>Placeholder review</strong><span>West Bradenton</span></footer></blockquote>
-          <blockquote class="reveal"><p>"Well water with that sulfur smell. Gone. Completely gone. My wife cried a little. I may have too."</p><footer><strong>Placeholder review</strong><span>Parrish</span></footer></blockquote>
+        <div class="notes">
+          <div class="notes__head reveal"><span>Field notes</span><span>Placeholder reviews until the real ones land</span></div>
+          <div class="notes__grid">
+            <blockquote class="fieldnote reveal"><p>"The first shower after install I genuinely thought the water heater was broken. It was just… soft. Our glasses come out of the dishwasher clear for the first time in years."</p><footer><b>Note 01</b> Lakewood Ranch</footer></blockquote>
+            <blockquote class="fieldnote reveal"><p>"They showed me the test results, explained what each number meant, and gave me a price on the spot. No three-hour sales pitch. Installed the following Tuesday."</p><footer><b>Note 02</b> West Bradenton</footer></blockquote>
+            <blockquote class="fieldnote reveal"><p>"Well water with that sulfur smell. Gone. Completely gone. My wife cried a little. I may have too."</p><footer><b>Note 03</b> Parrish</footer></blockquote>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= SERVICE AREA ================= -->
-    <section class="section area" id="area">
+    <!-- ================= SHEET 09 · SERVICE AREA ================= -->
+    <section class="sheet area" id="area" data-sheet="09" data-name="Service area">
       <div class="container area__grid">
         <div class="area__map reveal">
-          <svg viewBox="0 0 520 520" aria-label="Service area map of Manatee and Sarasota counties">
-            <defs>
-              <radialGradient id="ring" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#4fd8ff" stop-opacity=".35"/><stop offset="1" stop-color="#4fd8ff" stop-opacity="0"/></radialGradient>
-            </defs>
-            <!-- stylized gulf coast -->
-            <path class="area__coast" d="M70 40 C60 120 120 160 110 220 C100 280 150 320 140 380 C130 440 170 480 200 510 L520 510 L520 10 L70 10 Z" />
-            <path class="area__water" d="M0 0 H70 C60 120 120 160 110 220 C100 280 150 320 140 380 C130 440 170 480 200 510 L0 520 Z"/>
-            <circle cx="250" cy="230" r="190" fill="url(#ring)"/>
-            <circle class="area__pulse" cx="250" cy="230" r="40"/>
-            <circle class="area__pulse area__pulse--2" cx="250" cy="230" r="40"/>
+          <svg viewBox="0 0 560 560" aria-label="Survey-style map of the Manatee and Sarasota county service area">
+            <defs><pattern id="mapgrid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 H0 V40" fill="none" stroke="var(--grid-major)" stroke-width="1"/></pattern></defs>
+            <rect width="560" height="560" fill="url(#mapgrid)"/>
+            <path class="area__coast" d="M90 20 C80 120 150 170 135 240 C120 310 175 350 160 420 C145 490 195 530 230 560 L560 560 L560 0 L90 0 Z"/>
+            <path class="area__gulf" d="M0 0 H90 C80 120 150 170 135 240 C120 310 175 350 160 420 C145 490 195 530 230 560 L0 560 Z"/>
+            <text class="area__gulfLbl" x="60" y="300" transform="rotate(-78 60 300)">G U L F   O F   M E X I C O</text>
+            <circle class="area__radius" cx="270" cy="250" r="210"/>
+            <g class="dimline"><line x1="270" y1="250" x2="480" y2="250"/><text x="375" y="243">R = 25 mi</text></g>
             <g class="area__pins">
-              <g class="area__pin area__pin--hq" transform="translate(250 230)"><circle r="7"/><text y="-16">Bradenton HQ</text></g>
-              <g class="area__pin" transform="translate(345 260)"><circle r="5"/><text y="-12">Lakewood Ranch</text></g>
-              <g class="area__pin" transform="translate(235 150)"><circle r="5"/><text y="-12">Palmetto</text></g>
-              <g class="area__pin" transform="translate(330 120)"><circle r="5"/><text y="-12">Parrish</text></g>
-              <g class="area__pin" transform="translate(150 200)"><circle r="5"/><text y="-12">Anna Maria</text></g>
-              <g class="area__pin" transform="translate(185 300)"><circle r="5"/><text y="-12">Longboat Key</text></g>
-              <g class="area__pin" transform="translate(265 370)"><circle r="5"/><text y="-12">Sarasota</text></g>
-              <g class="area__pin" transform="translate(360 430)"><circle r="5"/><text y="-12">Venice</text></g>
-              <g class="area__pin" transform="translate(420 60)"><circle r="5"/><text y="-12">Ellenton</text></g>
+              <g class="pin pin--hq" transform="translate(270 250)"><path d="M0 -9 L8 6 L-8 6 Z"/><circle r="2"/><text y="-16">BRADENTON HQ</text></g>
+              <g class="pin" transform="translate(370 280)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Lakewood Ranch</text></g>
+              <g class="pin" transform="translate(255 165)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Palmetto</text></g>
+              <g class="pin" transform="translate(355 130)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Parrish</text></g>
+              <g class="pin" transform="translate(170 215)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Anna Maria</text></g>
+              <g class="pin" transform="translate(205 325)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Longboat Key</text></g>
+              <g class="pin" transform="translate(285 400)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Sarasota</text></g>
+              <g class="pin" transform="translate(385 470)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Venice</text></g>
+              <g class="pin" transform="translate(450 70)"><path d="M0 -7 L6 5 L-6 5 Z"/><text y="-13">Ellenton</text></g>
             </g>
+            <g class="area__north" transform="translate(500 500)"><path d="M0 -22 L7 8 L0 2 L-7 8 Z"/><text y="24">N</text></g>
           </svg>
+          <div class="fig-cap">FIG. 9 — Service radius from Bradenton. Survey not to scale.</div>
         </div>
         <div class="area__copy">
-          <span class="kicker reveal">Service area</span>
-          <h2 class="reveal">Proudly local.<br/><em>Gulf Coast to I-75.</em></h2>
+          <div class="shead__id reveal"><b>09</b><span>Survey</span></div>
+          <h2 class="reveal">Proudly local. Gulf Coast to I-75.</h2>
           <p class="reveal">Based in Bradenton and serving all of Manatee and Sarasota counties. If you can see the Skyway from your roof, we'll come to you.</p>
           <ul class="area__list reveal">
             <li>Bradenton</li><li>Lakewood Ranch</li><li>Palmetto</li><li>Parrish</li><li>Ellenton</li><li>Anna Maria Island</li><li>Holmes Beach</li><li>Longboat Key</li><li>Sarasota</li><li>Venice</li><li>Myakka City</li><li>Ruskin</li>
@@ -467,72 +422,62 @@
       </div>
     </section>
 
-    <!-- ================= CTA / TEST FORM ================= -->
-    <section class="section cta" id="test">
-      <div class="cta__bg" aria-hidden="true"></div>
+    <!-- ================= SHEET 10 · WORK ORDER ================= -->
+    <section class="sheet cta" id="test" data-sheet="10" data-name="Request site visit">
       <div class="container cta__grid">
         <div class="cta__copy">
-          <span class="kicker reveal">Free in-home water test</span>
-          <h2 class="reveal">Find out what's in<br/><em>your</em> water. Free.</h2>
-          <p class="reveal">A 20-minute visit. Real numbers from your tap. A written plan and a fixed price before we leave. No obligation, no pressure, and no "manager" phone calls.</p>
+          <div class="shead__id reveal"><b>10</b><span>Work order · Site visit</span></div>
+          <h2 class="reveal">Find out what's in <span class="mark" data-mark="circle">your</span> water. Free.</h2>
+          <p class="reveal">A 20-minute visit. Real numbers from your tap. A written plan and a fixed price before we leave. No obligation, no pressure, and no "let me call my manager."</p>
           <ul class="cta__list reveal">
-            <li>Hardness, chlorine, pH, TDS, iron &amp; more</li>
-            <li>Same-week appointments across Manatee County</li>
-            <li>Licensed &amp; insured · Florida-owned</li>
+            <li><i>a</i>Hardness, chlorine, pH, TDS, iron &amp; more</li>
+            <li><i>b</i>Same-week appointments across Manatee County</li>
+            <li><i>c</i>Licensed &amp; insured · Florida-owned</li>
           </ul>
         </div>
-        <form class="form reveal" id="leadForm" novalidate>
-          <div class="form__row">
+        <form class="wo reveal" id="leadForm" novalidate>
+          <div class="wo__head"><span>Work order</span><span>No. <b id="woNo">SW-00000</b></span></div>
+          <div class="wo__row">
             <label><span>Name</span><input type="text" name="name" placeholder="Jane Smith" required /></label>
             <label><span>Phone</span><input type="tel" name="phone" placeholder="(941) 555-0199" required /></label>
           </div>
           <label><span>Email</span><input type="email" name="email" placeholder="you@email.com" /></label>
           <label><span>Address or ZIP</span><input type="text" name="zip" placeholder="34205" required /></label>
-          <label><span>Your water comes from</span>
-            <select name="source"><option>City water</option><option>Private well</option><option>Not sure</option></select>
-          </label>
-          <label><span>What bugs you most?</span>
-            <select name="issue"><option>Hard water / scale</option><option>Chlorine taste or smell</option><option>Rotten-egg (sulfur) smell</option><option>Spots on dishes</option><option>Dry skin &amp; hair</option><option>Just want safer drinking water</option></select>
-          </label>
-          <button class="btn btn--primary btn--lg magnetic" type="submit"><span>Schedule my free test</span></button>
-          <p class="form__ok" id="formOk">Thanks! We'll call you within one business day to schedule.</p>
-          <p class="footnote">We never sell your info. Ever.</p>
+          <div class="wo__row">
+            <label><span>Water source</span><select name="source"><option>City water</option><option>Private well</option><option>Not sure</option></select></label>
+            <label><span>Primary complaint</span><select name="issue"><option>Hard water / scale</option><option>Chlorine taste or smell</option><option>Rotten-egg (sulfur) smell</option><option>Spots on dishes</option><option>Dry skin &amp; hair</option><option>Safer drinking water</option></select></label>
+          </div>
+          <button class="btn btn--red btn--lg" type="submit"><span>Submit work order</span><b>→</b></button>
+          <p class="wo__ok" id="formOk">Received. We'll call within one business day to schedule.</p>
+          <p class="fine">We never sell your info. Ever.</p>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer__grid">
-      <div class="footer__brand">
-        <div class="nav__brand">
-          <span class="nav__mark"><svg viewBox="0 0 32 40" width="22" height="28"><path d="M16 2 C16 2 3 18 3 26 a13 13 0 0 0 26 0 C29 18 16 2 16 2Z" fill="url(#mg)"/></svg></span>
-          <span class="nav__name">Safer Water <em>Co.</em></span>
-        </div>
+  <!-- Footer as a drawing title block -->
+  <footer class="tblock">
+    <div class="container tblock__grid">
+      <div class="tblock__cell tblock__cell--brand">
+        <span class="tblock__lbl">Project</span>
+        <strong>Safer Water Co.</strong>
         <p>Whole-home water filtration, softening and reverse osmosis. Bradenton, Florida.</p>
-        <p class="footer__license">FL License # 00000000 · Licensed &amp; Insured</p>
       </div>
-      <div>
-        <h4>Services</h4>
-        <a href="#systems">Whole-home filtration</a><a href="#systems">Water softening</a><a href="#systems">Reverse osmosis</a><a href="#systems">Well water treatment</a><a href="#systems">UV sterilization</a>
-      </div>
-      <div>
-        <h4>Company</h4>
-        <a href="#compare">Why us</a><a href="#area">Service area</a><a href="#test">Free water test</a><a href="#">Financing</a><a href="#">Warranty</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="tel:+19410000000">(941) 000-0000</a><a href="mailto:hello@saferwaterco.com">hello@saferwaterco.com</a>
-        <p>Bradenton, FL 34205<br/>Mon–Sat · 8am–6pm</p>
+      <div class="tblock__cell"><span class="tblock__lbl">Services</span><a href="#systems">Whole-home filtration</a><a href="#systems">Water softening</a><a href="#systems">Reverse osmosis</a><a href="#systems">Well water treatment</a><a href="#systems">UV sterilization</a></div>
+      <div class="tblock__cell"><span class="tblock__lbl">Sheets</span><a href="#water">02 Your water</a><a href="#journey">03 System section</a><a href="#compare">07 Specification</a><a href="#area">09 Service area</a><a href="#test">10 Work order</a></div>
+      <div class="tblock__cell"><span class="tblock__lbl">Contact</span><a href="tel:+19410000000">(941) 000-0000</a><a href="mailto:hello@saferwaterco.com">hello@saferwaterco.com</a><p>Bradenton, FL 34205<br/>Mon–Sat · 8am–6pm</p></div>
+      <div class="tblock__cell tblock__cell--meta">
+        <div><span class="tblock__lbl">Drawn by</span>SWC</div>
+        <div><span class="tblock__lbl">Date</span><span id="year"></span></div>
+        <div><span class="tblock__lbl">Lic. No.</span>00000000</div>
+        <div><span class="tblock__lbl">Rev</span>A</div>
       </div>
     </div>
-    <div class="container footer__bottom">
-      <span>© <span id="year"></span> Safer Water Co. All rights reserved.</span>
-      <span>Privacy · Terms</span>
-    </div>
+    <div class="container tblock__bottom"><span>© <span class="yr"></span> Safer Water Co. All rights reserved.</span><span>Privacy · Terms</span></div>
   </footer>
 
   <script src="vendor/gsap/gsap.min.js"></script>
+  <script src="vendor/gsap/ScrollTrigger.min.js"></script>
   <script type="module" src="js/hero3d.js"></script>
   <script type="module" src="js/journey3d.js"></script>
   <script src="js/main.js" defer></script>

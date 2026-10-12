@@ -1,6 +1,6 @@
 # Safer Water Co. — Website
 
-A premium, animation-heavy marketing site for a Bradenton, Florida whole-home water filtration company.
+A marketing site for a Bradenton, Florida whole-home water filtration company, designed as an engineer's blueprint: light drafting paper, ink-blue linework, red-pencil markups, dimension lines, title blocks and a crosshair cursor. Every section is a numbered "sheet".
 
 **Stack:** plain HTML / CSS / JavaScript. No build step. Three.js (3D) and GSAP (animation) are vendored in `vendor/` so the site works offline and has no third-party runtime dependency except Google Fonts.
 
@@ -24,12 +24,14 @@ It is a static site. Drag the folder onto Netlify, Vercel, Cloudflare Pages, or 
 
 | Section | File(s) | Notes |
 |---|---|---|
-| Hero with 3D refractive water droplets, bubble field and rippling water surface that reacts to the mouse | `js/hero3d.js` | Drops are real glass-like 3D meshes with refraction |
-| Interactive "what's in your water" drop | `index.html`, `js/main.js` (`DATA` object) | Hotspots + tabs; edit the text/levels in `DATA` |
-| Scroll-driven 3D filtration journey (5 stages) | `js/journey3d.js` | Camera travels along a pipe; particles visibly clean up as they pass each stage |
-| Before / after drag slider | `js/main.js` | Pure CSS scenes, swap in real photos later |
-| Hidden-cost calculator | `js/main.js` (`calc()`) | Formula constants are placeholders |
-| Systems cards, comparison table, process, reviews, service-area map, lead form | `index.html` | All copy is placeholder and easy to edit |
+| Hero: a glass droplet that refracts a drafted grid, wireframe companion drops, ink-dot bubbles, and a wireframe water surface that ripples under the cursor | `js/hero3d.js` | Re-usable `gridTexture()` lives here too |
+| Sheet 02: line-drawn drop with numbered callouts | `index.html`, `js/main.js` (`DATA` object) | Edit the text/levels in `DATA` |
+| Sheet 03: scroll-driven 3D "Section A-A" through 5 stages | `js/journey3d.js` | Ink-line housings, a red marker ring on the active stage, particles clean up as they pass each stage |
+| Sheet 04: existing vs. proposed drag slider | `js/main.js` | Line drawings with red-pencil markup; swap in real photos later |
+| Sheet 06: cost takeoff calculator | `js/main.js` (`calc()`) | Formula constants are placeholders |
+| Packages as drawing sheets with title blocks, spec table, details, field notes, survey map, work-order form, title-block footer | `index.html` | All copy is placeholder and easy to edit |
+
+Colors, fonts and spacing are CSS variables at the top of `css/styles.css`.
 
 ## Things to fill in before launch
 
