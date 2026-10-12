@@ -414,23 +414,50 @@ input[type=range]::-moz-range-thumb { width: 12px; height: 20px; background: var
 
 /* ---------- Sheet 09: survey map ---------- */
 .area__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: center; }
-.area__map svg { width: 100%; max-width: 540px; margin: 0 auto; border: 1px solid var(--ink); background: var(--paper-3); }
-.area__coast { fill: var(--paper-3); stroke: var(--ink); stroke-width: 1.2; }
-.area__gulf { fill: color-mix(in srgb, var(--water-2) 60%, transparent); }
-.area__gulfLbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: .3em; fill: var(--ink-2); }
-.area__radius { fill: none; stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 6 5; animation: spin 90s linear infinite; transform-origin: 270px 250px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.pin path { fill: var(--paper-3); stroke: var(--ink); stroke-width: 1.3; }
-.pin circle { fill: var(--ink); }
-.pin text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; fill: var(--ink-2); text-anchor: middle; }
-.pin--hq path { fill: var(--red); stroke: var(--red); }
-.pin--hq text { fill: var(--ink); font-weight: 600; letter-spacing: .14em; }
+.area__map { position: relative; }
+.area__svg { width: 100%; max-width: 520px; margin: 0 auto; display: block; background: var(--paper-3); }
+.area__sea { fill: var(--water-2); }
+.area__land { fill: var(--paper-3); stroke: var(--ink); stroke-width: .8; stroke-dasharray: 4 3; stroke-linejoin: round; }
+.area__land--svc { fill: #f3f6f9; }
+.area__land--home { fill: #fbfcfd; stroke-dasharray: none; stroke-width: 1.4; }
+.area__river { fill: none; stroke: color-mix(in srgb, var(--water) 70%, var(--ink)); stroke-width: 2.2; stroke-linecap: round; opacity: .7; }
+.area__isle { fill: none; stroke: #fbfcfd; stroke-linecap: round; }
+.area__isleB { fill: none; stroke: var(--ink); stroke-linecap: round; opacity: .9; }
+.area__road { fill: none; stroke: var(--ink); stroke-linecap: round; stroke-linejoin: round; }
+.area__road--minor { stroke-width: .7; opacity: .45; }
+.area__road--us { stroke-width: 1; opacity: .7; }
+.area__road--i { stroke-width: 1.8; }
+.area__road--bridge { stroke-width: 1.4; stroke-dasharray: 5 3; }
+.area__shield rect { fill: var(--ink); } .area__shield--us rect { fill: var(--paper-3); stroke: var(--ink); stroke-width: .8; }
+.area__shield text { font-family: var(--font-mono); font-size: 8.5px; font-weight: 600; fill: var(--paper); text-anchor: middle; letter-spacing: .04em; } .area__shield--us text { fill: var(--ink); }
+.area__lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: .22em; fill: var(--ink-3); text-anchor: middle; pointer-events: none; }
+.area__lbl--gulf { fill: var(--ink-2); font-size: 9.5px; }
+.area__lbl--small { font-size: 7px; letter-spacing: .12em; fill: var(--ink-2); text-anchor: start; }
+.area__ring { fill: none; stroke: var(--red); stroke-width: 1; stroke-dasharray: 5 4; opacity: .75; }
+.area__ring--outer { stroke-dasharray: 2 4; opacity: .55; }
+.area__ringLbl { font-family: var(--font-mono); font-size: 8px; font-weight: 600; letter-spacing: .12em; fill: var(--red); }
+.area__sweep { fill: var(--red); opacity: .12; animation: sweep 9s linear infinite; }
+@keyframes sweep { to { transform: rotate(360deg); } }
+.area__pin { cursor: pointer; }
+.area__pinHit { fill: transparent; }
+.area__pin path { fill: var(--paper-3); stroke: var(--ink); stroke-width: 1.3; transition: fill .2s, transform .2s; }
+.area__pin > circle:last-of-type { fill: var(--ink); }
+.area__pin text { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .04em; fill: var(--ink); paint-order: stroke; stroke: var(--paper-3); stroke-width: 3px; stroke-linejoin: round; transition: fill .2s; }
+.area__pin:hover path, .area__pin.is-hot path { fill: var(--red); stroke: var(--red); }
+.area__pin:hover text, .area__pin.is-hot text { fill: var(--red); font-weight: 600; }
+.area__pin--hq path { fill: var(--red); stroke: var(--red); }
+.area__pin--hq text { font-weight: 700; letter-spacing: .14em; font-size: 10px; }
+.area__scale line { stroke: var(--ink); stroke-width: 1; } .area__scale text { font-family: var(--font-mono); font-size: 8px; letter-spacing: .14em; fill: var(--ink); text-anchor: middle; }
 .area__north path { fill: var(--ink); } .area__north text { font-family: var(--font-mono); font-size: 12px; fill: var(--ink); text-anchor: middle; font-weight: 600; }
-.area__copy { position: relative; }
-.area__copy::before { content: ""; position: absolute; inset: -24px -28px; background: radial-gradient(ellipse at 40% 40%, var(--mat) 50%, transparent 100%); z-index: -1; }
+.area__frame { fill: none; stroke: var(--ink); stroke-width: 1; }
+.area__tip { position: absolute; z-index: 3; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 14px)); background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; padding: 7px 10px; white-space: nowrap; transition: opacity .2s; }
+.area__tip::after { content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ink); }
+.area__tip.is-on { opacity: 1; }
+.area__tip b { color: var(--water); font-weight: 600; }
 .area__copy p { color: var(--ink-2); margin-top: 20px; font-size: 1.06rem; }
 .area__list { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--ink-line); }
-.area__list li { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; background: var(--paper-3); letter-spacing: .08em; text-transform: uppercase; padding: 9px 14px; border-right: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); color: var(--ink-2); }
+.area__list li { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; background: var(--paper-3); letter-spacing: .08em; text-transform: uppercase; padding: 9px 14px; border-right: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); color: var(--ink-2); cursor: pointer; transition: background .2s, color .2s; }
+.area__list li:hover, .area__list li.is-hot { background: var(--ink); color: var(--paper); }
 
 /* ---------- Sheet 10: work order ---------- */
 .cta__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: center; }

@@ -142,6 +142,22 @@
   }
   if (inP) { [inP, inH, inB].forEach(i => i.addEventListener('input', calc)); calc(); }
 
+  /* ---------- sheet 09: survey map ---------- */
+  const areaSvg = $('.area__svg'), tip = $('#areaTip');
+  if (areaSvg && tip) {
+    const pins = $$('.area__pin'), items = $$('.area__list li[data-town]');
+    const hot = (town, on) => { pins.forEach(p => p.classList.toggle('is-hot', on && p.dataset.town === town)); items.forEach(i => i.classList.toggle('is-hot', on && i.dataset.town === town)); };
+    const showTip = pin => {
+      const town = pin.dataset.town, min = +pin.dataset.min, mi = pin.dataset.mi;
+      const wrapR = $('.area__map').getBoundingClientRect(), r = pin.querySelector('path').getBoundingClientRect();
+      tip.innerHTML = town === 'Bradenton' ? '<b>HQ</b> Bradenton, FL' : `<b>${town}</b> ~${min} min · ${mi} mi from HQ`;
+      tip.style.left = (r.left + r.width / 2 - wrapR.left) + 'px'; tip.style.top = (r.top - wrapR.top) + 'px'; tip.classList.add('is-on');
+    };
+    pins.forEach(p => { p.addEventListener('pointerenter', () => { hot(p.dataset.town, true); showTip(p); }); p.addEventListener('pointerleave', () => { hot(null, false); tip.classList.remove('is-on'); }); p.addEventListener('click', () => { hot(p.dataset.town, true); showTip(p); }); });
+    items.forEach(i => { const pin = pins.find(p => p.dataset.town === i.dataset.town); i.addEventListener('pointerenter', () => { hot(i.dataset.town, true); if (pin) showTip(pin); }); i.addEventListener('pointerleave', () => { hot(null, false); tip.classList.remove('is-on'); }); i.addEventListener('click', () => { hot(i.dataset.town, true); if (pin) { showTip(pin); areaSvg.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }); });
+    document.addEventListener('pointerdown', e => { if (!e.target.closest('.area__pin, .area__list li')) { hot(null, false); tip.classList.remove('is-on'); } });
+  }
+
   /* ---------- sheet 10: work order ---------- */
   const wo = $('#woNo'); if (wo) wo.textContent = 'SW-' + String(Math.floor(10000 + Math.random() * 89999));
   const form = $('#leadForm');
