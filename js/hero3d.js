@@ -67,13 +67,38 @@ function init() {
     color: 0xe8f7ff, metalness: 0, roughness: 0.03, transmission: 1, thickness: 2.2, ior: 1.33,
     clearcoat: 1, clearcoatRoughness: 0.03, attenuationColor: new THREE.Color(0x9fd8f2), attenuationDistance: 3.5, envMapIntensity: 0.9, specularIntensity: 1,
   });
-  const hero = new THREE.Mesh(teardrop(1.6, isMobile ? 48 : 96), glass);
+  // Shared "liquid" uniforms: continuous surface ripple, neck stretch for the drip, and cursor poke
+  const liquid = { uTime: { value: 0 }, uWobble: { value: 0 }, uStretch: { value: 0 }, uPoke: { value: new THREE.Vector3() } };
+  function liquify(mat) {
+    mat.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, liquid);
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', `#include <common>\nuniform float uTime; uniform float uWobble; uniform float uStretch; uniform vec3 uPoke;`)
+        .replace('#include <begin_vertex>', `
+          vec3 transformed = vec3(position);
+          {
+            float t = uTime; vec3 p = position;
+            float w = sin(p.y * 3.1 + t * 2.4) * 0.5 + sin(p.x * 4.3 - t * 3.1 + p.z * 2.0) * 0.3 + sin(p.z * 5.2 + t * 2.0 + p.y) * 0.2;
+            float amp = 0.03 + uWobble * 0.10;
+            transformed += normal * w * amp;
+            float low = smoothstep(0.3, -1.6, p.y);
+            float tail = low * low;
+            transformed.y -= uStretch * tail * 1.15;
+            transformed.xz *= 1.0 - uStretch * tail * 0.6;
+            transformed += uPoke * (0.6 + 0.4 * sin(p.y * 2.0 + t * 6.0)) * (1.0 - low * 0.5);
+          }`);
+    };
+    mat.customProgramCacheKey = () => 'liquid';
+  }
+  liquify(glass);
+  const hero = new THREE.Mesh(teardrop(1.6, isMobile ? 64 : 128), glass);
   hero.position.set(isMobile ? 2.1 : 3.6, isMobile ? 4.6 : 0.3, isMobile ? -2.5 : 0);
   if (isMobile) hero.scale.setScalar(0.7);
   hero.userData = { base: hero.position.clone(), speed: 0.35, amp: 0.22, rot: 0.1 };
   drops.add(hero);
   // Ink outline on the hero drop: a slightly larger back-face shell
-  const outline = new THREE.Mesh(hero.geometry, new THREE.MeshBasicMaterial({ color: INK, side: THREE.BackSide, transparent: true, opacity: 0.55 }));
+  const outlineMat = new THREE.MeshBasicMaterial({ color: INK, side: THREE.BackSide, transparent: true, opacity: 0.55 }); liquify(outlineMat);
+  const outline = new THREE.Mesh(hero.geometry, outlineMat);
   outline.scale.setScalar(1.012); hero.add(outline);
 
   // Companion drops: drafted wireframe meshes
@@ -134,8 +159,22 @@ function init() {
   const grad = sg.createRadialGradient(128, 128, 10, 128, 128, 128); grad.addColorStop(0, 'rgba(10,44,80,0.28)'); grad.addColorStop(1, 'rgba(10,44,80,0)'); sg.fillStyle = grad; sg.fillRect(0, 0, 256, 256);
   const shadow = new THREE.Mesh(new THREE.PlaneGeometry(6, 3.2), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shC), transparent: true, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2 + 0.1; shadow.position.set(hero.position.x, -3.15, hero.position.z); scene.add(shadow);
-  const drip = new THREE.Mesh(teardrop(0.14, 24), glass); drip.visible = false; scene.add(drip);
-  let dripT0 = 2.5; const DRIP_EVERY = 5.5, FALL = 0.9;
+  const dripMat = new THREE.MeshPhysicalMaterial({ color: 0xcdeeff, roughness: 0.05, metalness: 0, clearcoat: 1, transparent: true, opacity: 0.85, envMapIntensity: 1.2 });
+  const drip = new THREE.Mesh(new THREE.SphereGeometry(0.13, 24, 24), dripMat); drip.visible = false; scene.add(drip);
+  const SPLASH = 16;
+  const splash = new THREE.InstancedMesh(new THREE.SphereGeometry(0.05, 10, 10), dripMat, SPLASH); splash.count = 0; scene.add(splash);
+  const splashV = Array.from({ length: SPLASH }, () => new THREE.Vector3()), splashP = Array.from({ length: SPLASH }, () => new THREE.Vector3());
+  let splashAlive = 0; const dummy = new THREE.Object3D();
+  function burst(x, z) {
+    splashAlive = SPLASH; splash.count = SPLASH;
+    for (let i = 0; i < SPLASH; i++) { const a = (i / SPLASH) * Math.PI * 2 + Math.random() * 0.4; const sp = 1.4 + Math.random() * 1.6; splashP[i].set(x, -3.1, z); splashV[i].set(Math.cos(a) * sp * 0.6, 2.6 + Math.random() * 2.2, Math.sin(a) * sp * 0.6); }
+  }
+  // Drip timeline (seconds): neck stretches, drip tears off with recoil, falls, splashes
+  const PERIOD = 4.8, STRETCH_T = 1.4, FALL = 0.72;
+  let dripT0 = 2.0, dripped = false, lastT = 0;
+  const easeInOut = (u) => u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+  // Cursor poke: spring that pushes the drop away from the pointer and jiggles back
+  const pokeTarget = new THREE.Vector3(), pokeVel = new THREE.Vector3(), mouseWorld = new THREE.Vector3(), lastMouseWorld = new THREE.Vector3();
 
   // ---------- Interaction ----------
   const mouse = new THREE.Vector2(0, 0), target = new THREE.Vector2(0, 0);
@@ -154,13 +193,46 @@ function init() {
     gridTex.offset.y = t * 0.004;
     drops.children.forEach(m => { const u = m.userData, ph = u.phase || 0; m.position.y = u.base.y + Math.sin(t * u.speed + ph) * u.amp; m.position.x = u.base.x + Math.cos(t * u.speed * 0.7 + ph) * u.amp * 0.4; m.rotation.y = t * u.rot; m.rotation.z = Math.sin(t * 0.4 + ph) * 0.1; });
     hero.rotation.y = t * 0.12 + mouse.x * 0.4; hero.rotation.x = -mouse.y * 0.22;
-    const wob = 1 + Math.sin(t * 2.1) * 0.012; hero.scale.set((isMobile ? 0.7 : 1) / wob, (isMobile ? 0.7 : 1) * wob, (isMobile ? 0.7 : 1) / wob);
-    shadow.position.x = hero.position.x; shadow.scale.setScalar(1 + (hero.position.y - hero.userData.base.y) * 0.1);
-    // drip cycle
-    if (!reduced && t > dripT0) {
-      const age = t - dripT0;
-      if (age < FALL) { drip.visible = true; const bottom = hero.position.y - 1.7 * (isMobile ? 0.7 : 1); const yy = bottom - (age / FALL) * (age / FALL) * (bottom + 3.2); drip.position.set(hero.position.x, yy, hero.position.z); drip.scale.setScalar(0.6 + age * 0.5); }
-      else { if (drip.visible) { drip.visible = false; wMat.uniforms.uDrip.value.set(hero.position.x, -hero.position.z, t); } if (age > DRIP_EVERY) dripT0 = t + 0.2; }
+    const dt = Math.min(0.05, t - lastT); lastT = t;
+    const base = isMobile ? 0.7 : 1;
+    hero.scale.setScalar(base);
+    shadow.position.x = hero.position.x; shadow.scale.setScalar(1 + (hero.position.y - hero.userData.base.y) * 0.1 + liquid.uStretch.value * 0.15);
+    liquid.uTime.value = t;
+    liquid.uWobble.value *= Math.pow(0.25, dt); // decay
+
+    // --- cursor poke (pointer projected onto the drop's depth plane)
+    mouseWorld.set(mouse.x, mouse.y, 0.5).unproject(camera).sub(camera.position).normalize();
+    const k = (hero.position.z - camera.position.z) / mouseWorld.z; mouseWorld.multiplyScalar(k).add(camera.position);
+    const toDrop = hero.position.clone().sub(mouseWorld); const d = toDrop.length(); const reach = 2.4 * base;
+    const speed = mouseWorld.distanceTo(lastMouseWorld) / Math.max(dt, 1e-3); lastMouseWorld.copy(mouseWorld);
+    if (d < reach && speed > 0.2) { const f = (1 - d / reach) * Math.min(1, speed * 0.08); pokeTarget.copy(toDrop).normalize().multiplyScalar(f * 0.35); liquid.uWobble.value = Math.min(1, liquid.uWobble.value + f * 0.6); }
+    pokeTarget.multiplyScalar(Math.pow(0.02, dt));
+    const pk = liquid.uPoke.value;
+    pokeVel.addScaledVector(pokeTarget.clone().sub(pk), 40 * dt).multiplyScalar(Math.pow(0.0005, dt));
+    pk.addScaledVector(pokeVel, dt);
+    hero.rotation.z = Math.sin(t * 0.4) * 0.06 + pk.x * 0.8;
+
+    // --- drip timeline
+    if (!reduced) {
+      const u = t - dripT0;
+      if (u < STRETCH_T) { liquid.uStretch.value = easeInOut(Math.min(1, u / STRETCH_T)); dripped = false; }
+      else {
+        const v = u - STRETCH_T;
+        liquid.uStretch.value = Math.max(-0.15, Math.exp(-5 * v) * Math.cos(16 * v)); // tear-off recoil
+        if (!dripped) { dripped = true; drip.visible = true; liquid.uWobble.value = 1; }
+        if (v < FALL) {
+          const tipY = hero.position.y - (1.6 + 1.15) * base; const q = v / FALL;
+          drip.position.set(hero.position.x, tipY - q * q * (tipY + 3.15), hero.position.z);
+          drip.scale.set(1 - q * 0.25, 1 + q * 0.9, 1 - q * 0.25);
+        } else if (drip.visible) { drip.visible = false; wMat.uniforms.uDrip.value.set(hero.position.x, -hero.position.z, t); burst(hero.position.x, hero.position.z); }
+        if (u > PERIOD) dripT0 = t;
+      }
+    }
+    // --- splash crown
+    if (splashAlive > 0) {
+      let alive = 0;
+      for (let i = 0; i < SPLASH; i++) { const v = splashV[i], pp = splashP[i]; if (pp.y < -3.25 && v.y < 0) { dummy.scale.setScalar(0); } else { v.y -= 9.5 * dt; pp.addScaledVector(v, dt); dummy.scale.setScalar(1); alive++; } dummy.position.copy(pp); dummy.updateMatrix(); splash.setMatrixAt(i, dummy.matrix); }
+      splash.instanceMatrix.needsUpdate = true; splashAlive = alive; if (!alive) splash.count = 0;
     }
     camera.position.x += (mouse.x * 0.7 - camera.position.x) * 0.04; camera.position.y += (0.6 + mouse.y * 0.45 - camera.position.y) * 0.04;
     camera.lookAt(0, 0.2, 0);
