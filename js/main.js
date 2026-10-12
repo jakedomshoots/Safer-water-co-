@@ -14,12 +14,10 @@
   setTimeout(() => {
     loader.classList.add('is-done');
     document.body.classList.remove('is-locked');
-    const lines = $$('.hero__title .line > span');
-    if (hasGsap && !reduced) {
-      gsap.to(lines, { y: 0, duration: 1.1, ease: 'power4.out', stagger: 0.1 });
-      gsap.to('.hero .reveal', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', stagger: 0.1, delay: 0.45, onComplete: () => $$('.hero .reveal').forEach(el => el.classList.add('is-in')) });
-      gsap.from('.hero__notes > *', { opacity: 0, duration: .8, stagger: .15, delay: 1 });
-    } else { lines.forEach(l => (l.style.transform = 'none')); $$('.hero .reveal').forEach(el => el.classList.add('is-in')); }
+    // CSS-driven intro (no frame loop, so it never stalls on slow devices)
+    $$('.hero__title .line > span').forEach((l, i) => { l.style.transitionDelay = `${i * 0.12}s`; l.classList.add('is-in'); });
+    $$('.hero .reveal').forEach((el, i) => { el.style.transitionDelay = `${0.35 + i * 0.12}s`; el.classList.add('is-in'); });
+    $$('.hero__notes > *').forEach((el, i) => { el.style.transitionDelay = `${1 + i * 0.15}s`; el.classList.add('is-in'); });
     setTimeout(() => { $('.hero .mark')?.classList.add('is-in'); runCounters($('.hero')); }, 900);
   }, introDelay);
 
@@ -67,6 +65,8 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); $$('.mark', e.target).forEach(m => m.classList.add('is-in')); if (e.target.classList.contains('mark')) e.target.classList.add('is-in'); io.unobserve(e.target); } });
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
   $$('.reveal:not(.hero .reveal), .legend, h2 .mark').forEach(el => io.observe(el));
+  const sectIO = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); sectIO.unobserve(e.target); } }), { threshold: 0.05 });
+  $$('section.sheet').forEach(el => sectIO.observe(el));
   $$('.sheets, .details, .notes__grid').forEach(grp => $$('.reveal', grp).forEach((el, i) => (el.style.transitionDelay = `${i * 0.1}s`)));
 
   /* ---------- counters ---------- */

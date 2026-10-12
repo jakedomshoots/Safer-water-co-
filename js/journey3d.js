@@ -62,8 +62,20 @@ function init() {
   ];
   const cores = [];
   const h = 3.2, r = 1.15;
+  // soft contact shadow texture
+  const shC = document.createElement('canvas'); shC.width = shC.height = 256; const sg = shC.getContext('2d');
+  const grad = sg.createRadialGradient(128, 128, 10, 128, 128, 128); grad.addColorStop(0, 'rgba(10,44,80,0.35)'); grad.addColorStop(1, 'rgba(10,44,80,0)'); sg.fillStyle = grad; sg.fillRect(0, 0, 256, 256);
+  const shadowTex = new THREE.CanvasTexture(shC);
+  const bubbleMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() }, uH: { value: h - 0.6 } },
+    vertexShader: `attribute float seed; uniform float uTime; uniform float uPR; uniform float uH; varying float vA;
+      void main(){ vec3 p = position; p.y = mod(p.y + uTime * (0.25 + seed * 0.5), uH) - uH * 0.5; p.x += sin(uTime * 1.5 + seed * 30.0) * 0.04;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_PointSize = (1.5 + seed * 3.0) * uPR * (9.0 / -mv.z); vA = 0.35 + seed * 0.4; gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `varying float vA; void main(){ vec2 c = gl_PointCoord - 0.5; float d = length(c); if (d > 0.5) discard; float ring = smoothstep(0.5, 0.38, d) * smoothstep(0.25, 0.38, d); gl_FragColor = vec4(1.0, 1.0, 1.0, (ring + smoothstep(0.2, 0.0, d) * 0.5) * vA); }` });
+  const bubbleMats = [bubbleMat];
   stageX.forEach((x, i) => {
     const grp = new THREE.Group(); grp.position.x = x; scene.add(grp);
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 2.6), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false })); shadow.rotation.x = -Math.PI / 2; shadow.position.y = -2.58; grp.add(shadow);
+    if (i !== 3) { const bn = isMobile ? 60 : 140; const bg = new THREE.BufferGeometry(); const bp = new Float32Array(bn * 3), bs = new Float32Array(bn); for (let k = 0; k < bn; k++) { const a = Math.random() * 6.28, rr = Math.sqrt(Math.random()) * (r - 0.15); bp[k * 3] = Math.cos(a) * rr; bp[k * 3 + 1] = Math.random() * (h - 0.6); bp[k * 3 + 2] = Math.sin(a) * rr; bs[k] = Math.random(); } bg.setAttribute('position', new THREE.BufferAttribute(bp, 3)); bg.setAttribute('seed', new THREE.BufferAttribute(bs, 1)); grp.add(new THREE.Points(bg, bubbleMat)); }
     const shellGeo = new THREE.CylinderGeometry(r, r, h, 48, 1, true);
     grp.add(new THREE.Mesh(shellGeo, fillWater));
     grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.CylinderGeometry(r, r, h, 24, 1, false), 15), lineMat));
@@ -111,10 +123,10 @@ function init() {
       void main(){ vec3 p = position; p.x = mod(p.x + uTime * (1.6 + seed * 1.2) + uL, uL * 2.0) - uL;
         float sw = uTime * (0.8 + seed) + seed * 6.28; p.y += sin(sw) * 0.04; p.z += cos(sw) * 0.04;
         float c = 0.0; for (int i = 0; i < 5; i++) { c += smoothstep(uStages[i] - 0.6, uStages[i] + 0.6, p.x) * step(float(i), uActive + 0.5); } c /= 5.0;
-        vec3 dirty = vec3(0.45, 0.30, 0.15); vec3 mid = vec3(0.16, 0.42, 0.65); vec3 pure = vec3(0.35, 0.70, 0.90);
+        vec3 dirty = vec3(0.40, 0.26, 0.12); vec3 mid = vec3(0.10, 0.36, 0.62); vec3 pure = vec3(0.22, 0.62, 0.88);
         vCol = c < 0.5 ? mix(dirty, mid, c * 2.0) : mix(mid, pure, (c - 0.5) * 2.0);
         float passedSed = smoothstep(uStages[0] - 0.4, uStages[0] + 0.4, p.x) * step(0.0, uActive + 0.5);
-        vKind = kind; float sizeBase = kind > 0.5 ? (3.0 + seed * 5.0) : (1.3 + seed * 2.2);
+        vKind = kind; float sizeBase = kind > 0.5 ? (3.5 + seed * 5.5) : (1.8 + seed * 2.6);
         vAlpha = kind > 0.5 ? (1.0 - passedSed) * 0.9 : mix(0.75, 0.9, c);
         vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_PointSize = sizeBase * mix(1.0, 0.75, c) * uPR * (9.0 / -mv.z); gl_Position = projectionMatrix * mv; }`,
     fragmentShader: `varying vec3 vCol; varying float vAlpha; varying float vKind;
@@ -139,8 +151,10 @@ function init() {
     const x = THREE.MathUtils.lerp(stageX[0], stageX[STAGES - 1], smooth);
     const stage = Math.round(smooth * (STAGES - 1));
     const orbit = Math.sin(smooth * Math.PI * 2.5) * 0.9;
-    camera.position.set(x + 1.2 + orbit, 1.5 + Math.sin(smooth * Math.PI) * 0.5, isMobile ? 9.8 : 7.4);
-    look.set(x + 0.3, isMobile ? 0.9 : 0, 0); camera.lookAt(look);
+    const wide = camera.aspect > 1.15;
+    camera.position.set(x + (wide ? -1.7 : 0.6) + orbit * 0.6, (wide ? 1.4 : 0.6) + Math.sin(smooth * Math.PI) * 0.5, wide ? 7.8 : 10.5);
+    look.set(x + (wide ? -2.7 : 0.2), wide ? 0.1 : -0.6, 0); camera.lookAt(look);
+    bubbleMats.forEach(m => (m.uniforms.uTime.value = t));
 
     streamMat.uniforms.uActive.value = smooth * (STAGES - 1) + 0.5; streamMat.uniforms.uTime.value = t;
     marker.position.x += (stageX[stage] - marker.position.x) * 0.1; marker.children[0].rotation.z = t * 0.6; marker.children[1].position.y = h / 2 + 1.1 + Math.sin(t * 3) * 0.08;

@@ -113,13 +113,14 @@ function init() {
   const wGeo = new THREE.PlaneGeometry(60, 36, isMobile ? 48 : 90, isMobile ? 28 : 54);
   const wMat = new THREE.ShaderMaterial({
     wireframe: true, transparent: true, depthWrite: false,
-    uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector2(0, 0) } },
-    vertexShader: `uniform float uTime; uniform vec2 uMouse; varying float vH; varying vec3 vPos;
+    uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector2(0, 0) }, uDrip: { value: new THREE.Vector3(0, 0, -100) } },
+    vertexShader: `uniform float uTime; uniform vec2 uMouse; uniform vec3 uDrip; varying float vH; varying vec3 vPos;
       float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
       float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(hash(i), hash(i+vec2(1,0)), f.x), mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y); }
       void main(){ vec3 p = position; float t = uTime * 0.3;
         float h = noise(p.xy * 0.22 + t) * 0.7 + noise(p.xy * 0.55 - t * 0.6) * 0.25 + sin(p.x * 0.7 + t * 2.0) * 0.12;
         vec2 m = uMouse * vec2(15.0, 8.0); float d = distance(p.xy, m); h += sin(d * 2.6 - uTime * 3.0) * exp(-d * 0.4) * 0.45;
+        float age = uTime - uDrip.z; float dd = distance(p.xy, uDrip.xy); float ring = sin(dd * 3.2 - age * 6.0) * exp(-dd * 0.35) * exp(-age * 0.9) * step(0.0, age) * smoothstep(age * 4.0 + 0.5, age * 4.0 - 1.5, dd) * 0.9; h += ring;
         p.z += h; vH = h; vPos = p; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
     fragmentShader: `varying float vH; varying vec3 vPos; void main(){ float fade = smoothstep(-18.0, 0.0, vPos.y) * smoothstep(34.0, 10.0, abs(vPos.x));
       float crest = smoothstep(0.1, 0.9, vH); vec3 col = mix(vec3(0.06, 0.23, 0.4), vec3(0.82, 0.27, 0.18), crest * 0.35);
@@ -127,6 +128,14 @@ function init() {
   });
   const water = new THREE.Mesh(wGeo, wMat);
   water.rotation.x = -Math.PI / 2 + 0.1; water.position.y = -3.2; scene.add(water);
+
+  // Contact shadow under the hero drop + a small drip that falls and rings the water
+  const shC = document.createElement('canvas'); shC.width = shC.height = 256; const sg = shC.getContext('2d');
+  const grad = sg.createRadialGradient(128, 128, 10, 128, 128, 128); grad.addColorStop(0, 'rgba(10,44,80,0.28)'); grad.addColorStop(1, 'rgba(10,44,80,0)'); sg.fillStyle = grad; sg.fillRect(0, 0, 256, 256);
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(6, 3.2), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shC), transparent: true, depthWrite: false }));
+  shadow.rotation.x = -Math.PI / 2 + 0.1; shadow.position.set(hero.position.x, -3.15, hero.position.z); scene.add(shadow);
+  const drip = new THREE.Mesh(teardrop(0.14, 24), glass); drip.visible = false; scene.add(drip);
+  let dripT0 = 2.5; const DRIP_EVERY = 5.5, FALL = 0.9;
 
   // ---------- Interaction ----------
   const mouse = new THREE.Vector2(0, 0), target = new THREE.Vector2(0, 0);
@@ -145,6 +154,14 @@ function init() {
     gridTex.offset.y = t * 0.004;
     drops.children.forEach(m => { const u = m.userData, ph = u.phase || 0; m.position.y = u.base.y + Math.sin(t * u.speed + ph) * u.amp; m.position.x = u.base.x + Math.cos(t * u.speed * 0.7 + ph) * u.amp * 0.4; m.rotation.y = t * u.rot; m.rotation.z = Math.sin(t * 0.4 + ph) * 0.1; });
     hero.rotation.y = t * 0.12 + mouse.x * 0.4; hero.rotation.x = -mouse.y * 0.22;
+    const wob = 1 + Math.sin(t * 2.1) * 0.012; hero.scale.set((isMobile ? 0.7 : 1) / wob, (isMobile ? 0.7 : 1) * wob, (isMobile ? 0.7 : 1) / wob);
+    shadow.position.x = hero.position.x; shadow.scale.setScalar(1 + (hero.position.y - hero.userData.base.y) * 0.1);
+    // drip cycle
+    if (!reduced && t > dripT0) {
+      const age = t - dripT0;
+      if (age < FALL) { drip.visible = true; const bottom = hero.position.y - 1.7 * (isMobile ? 0.7 : 1); const yy = bottom - (age / FALL) * (age / FALL) * (bottom + 3.2); drip.position.set(hero.position.x, yy, hero.position.z); drip.scale.setScalar(0.6 + age * 0.5); }
+      else { if (drip.visible) { drip.visible = false; wMat.uniforms.uDrip.value.set(hero.position.x, -hero.position.z, t); } if (age > DRIP_EVERY) dripT0 = t + 0.2; }
+    }
     camera.position.x += (mouse.x * 0.7 - camera.position.x) * 0.04; camera.position.y += (0.6 + mouse.y * 0.45 - camera.position.y) * 0.04;
     camera.lookAt(0, 0.2, 0);
     renderer.render(scene, camera);
