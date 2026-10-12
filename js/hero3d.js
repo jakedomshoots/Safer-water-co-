@@ -109,21 +109,6 @@ function init() {
   const outline = new THREE.Mesh(hero.geometry, outlineMat);
   outline.scale.setScalar(1.012); hero.add(outline);
 
-  // Companion drops: drafted wireframe meshes
-  const wireMat = new THREE.MeshBasicMaterial({ color: INK, wireframe: true, transparent: true, opacity: 0.32 });
-  const fillMat = new THREE.MeshBasicMaterial({ color: 0xc7e9f8, transparent: true, opacity: 0.35 });
-  const smallCount = isMobile ? 4 : 8;
-  for (let i = 0; i < smallCount; i++) {
-    const r = THREE.MathUtils.randFloat(0.22, 0.55);
-    const geo = teardrop(r, 14);
-    const m = new THREE.Mesh(geo, fillMat); m.add(new THREE.Mesh(geo, wireMat));
-    const onRight = isMobile || Math.random() < 0.7;
-    const px = onRight ? THREE.MathUtils.randFloat(0.6, 8) : THREE.MathUtils.randFloat(-7.5, -5);
-    m.position.set(px, THREE.MathUtils.randFloatSpread(6), onRight ? THREE.MathUtils.randFloat(-3, 1) : THREE.MathUtils.randFloat(-5, -2));
-    m.userData = { base: m.position.clone(), speed: THREE.MathUtils.randFloat(0.25, 0.6), amp: THREE.MathUtils.randFloat(0.15, 0.4), rot: THREE.MathUtils.randFloat(0.1, 0.35), phase: Math.random() * 6.28 };
-    drops.add(m);
-  }
-
   // ---------- Ink-dot bubbles ----------
   const N = isMobile ? 350 : 900;
   const pGeo = new THREE.BufferGeometry();
