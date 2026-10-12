@@ -152,8 +152,8 @@ function init() {
     const stage = Math.round(smooth * (STAGES - 1));
     const orbit = Math.sin(smooth * Math.PI * 2.5) * 0.9;
     const wide = camera.aspect > 1.15;
-    camera.position.set(x + (wide ? -1.7 : 0.3) + orbit * (wide ? 0.6 : 0.3), (wide ? 1.4 : 2.2) + Math.sin(smooth * Math.PI) * 0.4, wide ? 7.8 : 9.6);
-    look.set(x + (wide ? -2.7 : 0.1), wide ? 0.1 : 1.25, 0); camera.lookAt(look);
+    camera.position.set(x + (wide ? -1.7 : 0.3) + orbit * (wide ? 0.6 : 0.3), (wide ? 1.4 : 1.5) + Math.sin(smooth * Math.PI) * 0.4, wide ? 7.8 : 10.4);
+    look.set(x + (wide ? -2.7 : 0.1), wide ? 0.1 : 0.2, 0); camera.lookAt(look);
     bubbleMats.forEach(m => (m.uniforms.uTime.value = t));
 
     streamMat.uniforms.uActive.value = smooth * (STAGES - 1) + 0.5; streamMat.uniforms.uTime.value = t;

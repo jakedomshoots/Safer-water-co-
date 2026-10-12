@@ -491,14 +491,15 @@ input[type=range]::-moz-range-thumb { width: 12px; height: 20px; background: var
   .journey__title { top: 78px; left: var(--gutter); right: var(--gutter); max-width: none; padding: 8px 0 6px; background: linear-gradient(var(--paper) 70%, transparent); }
   .journey__title h2 { font-size: 1.35rem; }
   .journey__title .shead__id { margin-bottom: 8px; font-size: .6rem; }
-  .journey__canvas { height: 72%; }
-  .journey__pin::after { content: ""; position: absolute; left: 0; right: 0; top: 64%; height: 9%; background: linear-gradient(transparent, var(--paper)); pointer-events: none; }
-  .journey__steps { left: var(--gutter); right: var(--gutter); width: auto; bottom: 66px; }
-  .callout-card { padding: 18px 20px; box-shadow: 4px 4px 0 rgba(10,44,80,.12); }
-  .callout-card h3 { font-size: 1.25rem; }
-  .callout-card p { font-size: .92rem; }
+  .journey__overlay::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 230px; background: linear-gradient(to top, var(--paper) 55%, transparent); }
+  .journey__steps { left: var(--gutter); right: var(--gutter); width: auto; bottom: 62px; }
+  .callout-card { border: 0; border-top: 2px solid var(--ink); background: transparent; box-shadow: none; padding: 12px 0 0; transform: translateY(10px); }
+  .callout-card__no { font-size: .6rem; margin-bottom: 5px; }
+  .callout-card h3 { font-size: 1.15rem; margin-bottom: 5px; }
+  .callout-card p { font-size: .88rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .callout-card::before, .callout-card::after { display: none; }
-  .journey__track { bottom: 32px; }
+  .journey__track { bottom: 26px; }
+  .journey__stn { font-size: .58rem; }
   .hero__content::before { left: -20px; width: calc(100% + 40px); top: 80px; background: linear-gradient(180deg, transparent 0%, var(--mat) 12%, var(--mat) 85%, transparent 100%); }
   .specgrid__row { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
   .specgrid__row > div { padding: 12px 10px; font-size: .74rem; }
